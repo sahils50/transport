@@ -8,8 +8,12 @@ export default function PublicLayout() {
         headerTitleAlign: "center",
       }}
     >
-      <Stack.Screen name="login" options={{ title: "Sign In" }} />
-      <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+      <Stack.Screen name="index" options={{ headerShown: false, }} />
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
+      <Stack.Screen name="profilephoto" options={{ headerShown: false }} />
+      <Stack.Screen name="Forgotpass" options={{ headerShown: false }} />
+      <Stack.Screen name="Otp" options={{ headerShown: false }} />
+
     </Stack>
   );
 }
