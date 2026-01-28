@@ -1,4 +1,5 @@
 import { HapticTab } from "@/components/haptic-tab";
+import CustomHeader from "@/components/Header";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Tabs } from "expo-router";
 
@@ -16,6 +17,14 @@ export default function OwnerLayout() {
           title: "Home",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" size={24} color={color} />
+          ),
+          headerShown: true, // ← only this screen shows header
+          header: () => (
+            <CustomHeader
+              variant="greeting"
+              userName="Rahul"
+              subtitle="You have 1 trip scheduled today"
+            />
           ),
         }}
       />
