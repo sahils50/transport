@@ -1,3 +1,4 @@
+import { HapticTab } from "@/components/haptic-tab";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Tabs } from "expo-router";
 
@@ -5,28 +6,8 @@ export default function OwnerLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarButton: (props) => <HapticTab {...props} />,
         headerShown: false,
-
-        tabBarStyle: {
-          backgroundColor: "#fff",
-          borderTopWidth: 1,
-          borderTopColor: "#e5e5e5",
-          height: 56,
-          paddingBottom: 4,
-        },
-
-        tabBarActiveTintColor: "#111",
-        tabBarInactiveTintColor: "#888",
-
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "500",
-          marginBottom: 2,
-        },
-
-        tabBarItemStyle: {
-          paddingVertical: 4,
-        },
       }}
     >
       <Tabs.Screen
@@ -38,7 +19,6 @@ export default function OwnerLayout() {
           ),
         }}
       />
-
       <Tabs.Screen
         name="DriverScreen"
         options={{
