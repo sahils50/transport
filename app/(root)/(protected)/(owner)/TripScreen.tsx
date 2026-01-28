@@ -1,5 +1,9 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function TripScreen() {
-  return <View>Owner Trip</View>;
+  return (
+    <View>
+      <Text>Owner Trip</Text>
+    </View>
+  );
 }

@@ -1,5 +1,9 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function VehicleScreen() {
-  return <View>Owner Vehicle</View>;
+  return (
+    <View>
+      <Text>Owner Vehicle</Text>
+    </View>
+  );
 }

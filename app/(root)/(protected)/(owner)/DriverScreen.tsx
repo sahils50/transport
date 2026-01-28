@@ -1,5 +1,9 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function DriverScreen() {
-  return <View>Owner Screen</View>;
+  return (
+    <View>
+      <Text>Owner Screen</Text>
+    </View>
+  );
 }
