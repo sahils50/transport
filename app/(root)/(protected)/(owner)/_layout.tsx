@@ -18,7 +18,7 @@ export default function OwnerLayout() {
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" size={24} color={color} />
           ),
-          headerShown: true, // ← only this screen shows header
+          headerShown: true,
           header: () => (
             <CustomHeader
               variant="greeting"
