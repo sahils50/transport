@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import QuickAction from "./QuickAction";
+import QuickAction from "../../../../components/Dashboard_compo/QuickAction";
+import ExpensesAnalysis from "@/components/Dashboard_compo/ExpensesAnalysis";
 
 type StatItem = {
   id: number;
@@ -82,14 +83,22 @@ const Dashboard: React.FC = () => {
         ))}
       </View>
 
-      <View>
-        <Text className="font-semibold px-4 text-2xl">Quick Actions</Text>
-        <QuickAction />
+      <View className="flex-row">
+        <MaterialCommunityIcons
+                name="map-marker-path"
+                size={30}
+                color="orange"
+              />
+        <Text className="font-extrabold text-gray-700 px-4 text-2xl">Live Trips</Text>
+        {/* <QuickAction /> */}
       </View>
 
       <View>
-        <Text className="font-semibold px-4 text-2xl">Expense Analysis</Text>
-       
+        <QuickAction />
+      </View>
+
+      <View className="mt-4">
+        <ExpensesAnalysis/>
       </View>
 
     </SafeAreaView>
