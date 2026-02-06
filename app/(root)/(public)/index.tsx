@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 // import ActionButton from "@/components/actionbutton";
 import { useRouter } from "expo-router";
-import ActionButton from "@/components/ActionButton";
+import ActionButton from "@/Components/ActionButton";
 
 type Role = "owner" | "driver";
 

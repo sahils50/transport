@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import ActionButton from "@/components/ActionButton";
+import ActionButton from "@/Components/ActionButton";
 
 const BUSINESS_CODE = "RG-6247";
 
