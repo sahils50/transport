@@ -29,7 +29,7 @@ export default function OwnerLayout() {
         }}
       />
       <Tabs.Screen
-        name="DriverScreen"
+        name="DriverScreen" 
         options={{
           title: "Drivers",
           tabBarIcon: ({ color }) => (
@@ -39,8 +39,61 @@ export default function OwnerLayout() {
               color={color}
             />
           ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Drivers detail"
+              showBack = {true}
+            />
+          ),
         }}
       />
+       <Tabs.Screen
+        name="DriverProfileScreen"
+        options={{
+          href: null,
+          title: "Driver Profle",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="car-multiple"
+              size={24}
+              color={color}
+            />
+          ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Driver Profile"
+              showBack = {true}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="edit-driver"
+        options={{
+          href: null,
+          title: "Edit Driver Detail",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="car-multiple"
+              size={24}
+              color={color}
+            />
+          ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Edit Driver Detail"
+              showBack = {true}
+            />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="VehicleScreen"
         options={{
