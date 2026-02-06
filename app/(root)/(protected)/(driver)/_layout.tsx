@@ -1,32 +1,14 @@
+import { HapticTab } from "@/components/haptic-tab";
+import CustomHeader from "@/components/Header";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 
 export default function DriverLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarButton: (props) => <HapticTab {...props} />,
         headerShown: false,
-
-        tabBarStyle: {
-          backgroundColor: "#fff",
-          borderTopWidth: 1,
-          borderTopColor: "#e5e5e5",
-          height: 56,
-          paddingBottom: 4,
-        },
-
-        tabBarActiveTintColor: "#111",
-        tabBarInactiveTintColor: "#888",
-
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "500",
-          marginBottom: 2,
-        },
-
-        tabBarItemStyle: {
-          paddingVertical: 4,
-        },
       }}
     >
       <Tabs.Screen
@@ -36,9 +18,74 @@ export default function DriverLayout() {
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" size={24} color={color} />
           ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="Today's Trips"
+              showBack={false}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
         }}
       />
-
+      <Tabs.Screen
+        name="AddExpense"
+        options={{
+          href: null,
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="Add Expense"
+              showBack={true}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ContactOwner"
+        options={{
+          href: null,
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="Contact Owner"
+              showBack={true}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Notification"
+        options={{
+          href: null,
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="Notifications"
+              showBack={true}
+              showBell={false}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={false}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="TripScreen"
         options={{
@@ -73,6 +120,14 @@ export default function DriverLayout() {
           title: "Profile",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" size={24} color={color} />
+          ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="greeting"
+              userName="Rahul"
+              subtitle="You have 1 trip scheduled today"
+            />
           ),
         }}
       />
