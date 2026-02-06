@@ -18,9 +18,14 @@ interface CustomHeaderProps {
   userName?: string; // for greeting variant
   showBack?: boolean; // force show / hide (highest priority)
   onBackPress?: () => void; // custom back action
-  rightIcon?: "bell" | "gear" | "avatar" | "none";
-  onRightPress?: () => void;
-  rightContent?: React.ReactNode; // fully custom right side (overrides rightIcon)
+  rightIcon?: "bell" | "gear" | "avatar" | "none"; // kept for backward compat
+  onRightPress?: () => void; // kept for backward compat (applies to single rightIcon)
+  rightContent?: React.ReactNode; // fully custom right side (overrides everything)
+  // New props for multi-icon flexibility
+  showBell?: boolean;
+  onBellPress?: () => void;
+  showAvatar?: boolean;
+  onAvatarPress?: () => void;
 }
 
 const CustomHeader: FC<CustomHeaderProps> = ({
@@ -33,6 +38,10 @@ const CustomHeader: FC<CustomHeaderProps> = ({
   rightIcon = "bell",
   onRightPress,
   rightContent,
+  showBell = false,
+  onBellPress,
+  showAvatar = false,
+  onAvatarPress,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -60,6 +69,15 @@ const CustomHeader: FC<CustomHeaderProps> = ({
   };
 
   const isGreeting = variant === "greeting";
+
+  // Backward compat: map old rightIcon to new props if no explicit show* is passed
+  const effectiveShowBell = showBell || (rightIcon === "bell" && !showAvatar);
+  const effectiveShowAvatar =
+    showAvatar || (rightIcon === "avatar" && !showBell);
+  const effectiveOnBellPress =
+    onBellPress || (rightIcon === "bell" ? onRightPress : undefined);
+  const effectiveOnAvatarPress =
+    onAvatarPress || (rightIcon === "avatar" ? onRightPress : undefined);
 
   return (
     <LinearGradient
@@ -113,24 +131,51 @@ const CustomHeader: FC<CustomHeaderProps> = ({
           )}
         </View>
 
-        {/* RIGHT: Icon, custom content, or spacer */}
+        {/* RIGHT: Multi-icon support, custom content, or spacer */}
         {rightContent ? (
           <View className="p-2 -mr-2">{rightContent}</View>
-        ) : rightIcon !== "none" ? (
-          <TouchableOpacity
-            onPress={onRightPress}
-            className="p-2 -mr-2 active:opacity-70"
-          >
-            {rightIcon === "bell" && (
-              <Ionicons name="notifications-outline" size={26} color="white" />
+        ) : effectiveShowBell || effectiveShowAvatar || rightIcon === "gear" ? (
+          <View className="flex-row items-center -mr-2">
+            {/* Bell */}
+            {effectiveShowBell && (
+              <TouchableOpacity
+                onPress={effectiveOnBellPress}
+                className="p-2 active:opacity-70"
+              >
+                <Ionicons
+                  name="notifications-outline"
+                  size={26}
+                  color="white"
+                />
+              </TouchableOpacity>
             )}
-            {rightIcon === "gear" && (
-              <Ionicons name="settings-outline" size={26} color="white" />
+
+            {/* Avatar */}
+            {effectiveShowAvatar && (
+              <TouchableOpacity
+                onPress={effectiveOnAvatarPress}
+                className="p-2 active:opacity-70 ml-2"
+              >
+                <Ionicons
+                  name="person-circle-outline"
+                  size={30}
+                  color="white"
+                />
+              </TouchableOpacity>
             )}
-            {rightIcon === "avatar" && (
-              <Ionicons name="person-circle-outline" size={30} color="white" />
-            )}
-          </TouchableOpacity>
+
+            {/* Gear (single, for backward compat) */}
+            {rightIcon === "gear" &&
+              !effectiveShowBell &&
+              !effectiveShowAvatar && (
+                <TouchableOpacity
+                  onPress={onRightPress}
+                  className="p-2 active:opacity-70"
+                >
+                  <Ionicons name="settings-outline" size={26} color="white" />
+                </TouchableOpacity>
+              )}
+          </View>
         ) : (
           <View className="w-11" /> // balance when no right content
         )}
