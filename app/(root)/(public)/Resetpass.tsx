@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 // import ActionButton from "@/components/actionbutton";
-import ActionButton from "@/Components/ActionButton";
+import ActionButton from "@/components/ActionButton";
 import { router } from "expo-router";
 
 export default function ResetPass() {
