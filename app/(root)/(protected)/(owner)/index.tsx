@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text,  ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import QuickAction from "@/Components/Dashboard_compo/QuickAction";
-import ExpensesAnalysis from "@/Components/Dashboard_compo/ExpensesAnalysis";
-import Performance from "@/Components/Dashboard_compo/Performance";
-// import LiveTripsmap from "@/Components/Dashboard_compo/LiveTripsmap";
+import QuickAction from "@/components/Dashboard_compo/QuickAction";
+import ExpensesAnalysis from "@/components/Dashboard_compo/ExpensesAnalysis";
+import Performance from "@/components/Dashboard_compo/Performance";
+// import LiveTripsmap from "@/components/Dashboard_compo/LiveTripsmap";
 
 type StatItem = {
   id: number;
