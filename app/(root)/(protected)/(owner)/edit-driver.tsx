@@ -2,7 +2,7 @@ import { ScrollView, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
-import DriverForm from "@/components/DriverForm";
+import DriverForm from "@/Components/DriverForm";
 
 export default function EditDriverScreen() {
   const { driverId } = useLocalSearchParams();
