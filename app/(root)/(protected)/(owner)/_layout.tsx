@@ -1,5 +1,5 @@
-import { HapticTab } from "@/components/haptic-tab";
-import CustomHeader from "@/components/Header";
+import { HapticTab } from "@/Components/haptic-tab";
+import CustomHeader from "@/Components/Header";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Tabs } from "expo-router";
 
@@ -52,6 +52,8 @@ export default function OwnerLayout() {
               color={color}
             />
           ),
+          headerShown: true,
+          header: () => <CustomHeader title="Vechicle Management" />,
         }}
       />
       <Tabs.Screen
@@ -63,6 +65,12 @@ export default function OwnerLayout() {
               name="map-marker-path"
               size={24}
               color={color}
+            />
+          ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+             title="Trips"
             />
           ),
         }}
