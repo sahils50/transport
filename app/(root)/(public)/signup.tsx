@@ -2,7 +2,7 @@
 import { router } from "expo-router";
 import { Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ActionButton from "@/Components/ActionButton";
+import ActionButton from "@/components/ActionButton";
 
 
 export default function Signup() {

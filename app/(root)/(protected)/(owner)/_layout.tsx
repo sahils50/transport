@@ -1,5 +1,5 @@
-import { HapticTab } from "@/Components/haptic-tab";
-import CustomHeader from "@/Components/Header";
+import { HapticTab } from "@/components/haptic-tab";
+import CustomHeader from "@/components/Header";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Tabs } from "expo-router";
 
