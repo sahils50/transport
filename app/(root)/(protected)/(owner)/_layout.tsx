@@ -98,8 +98,8 @@ export default function OwnerLayout() {
       <Tabs.Screen
         name="add-vehicle"
         options={{
-          // href: null,
-          title: "Add Driver",
+          href: null,
+          title: "Add Vehicle",
           headerShown: true,
           header: () => (
             <CustomHeader
