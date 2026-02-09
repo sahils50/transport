@@ -54,13 +54,6 @@ export default function OwnerLayout() {
         options={{
           href: null,
           title: "Driver Profle",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="car-multiple"
-              size={24}
-              color={color}
-            />
-          ),
           headerShown: true,
           header: () => (
             <CustomHeader
@@ -76,18 +69,27 @@ export default function OwnerLayout() {
         options={{
           href: null,
           title: "Edit Driver Detail",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="car-multiple"
-              size={24}
-              color={color}
-            />
-          ),
           headerShown: true,
           header: () => (
             <CustomHeader
               variant="default"
               title="Edit Driver Detail"
+              showBack = {true}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="add-driver"
+        options={{
+          href: null,
+          title: "Add Driver",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Add Driver "
               showBack = {true}
             />
           ),
