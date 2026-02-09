@@ -4,10 +4,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Feather from "@expo/vector-icons/Feather";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 type DriverFormProps = {
   form: {
@@ -29,7 +32,7 @@ export default function DriverForm({
 }: DriverFormProps) {
   const [showDatePicker, setShowDatePicker] =
     useState(false);
-
+    
   return (
     <View className="mt-4">
       {/* DRIVER DETAILS */}
@@ -200,7 +203,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <View className="bg-orange-50 rounded-xl p-4 mb-4">
+    <View className="bg-white rounded-xl p-4 mb-4">
       <Text className="font-bold text-orange-600 mb-3">
         {title}
       </Text>

@@ -30,7 +30,7 @@ export default function Index() {
         <TouchableOpacity
           activeOpacity={0.5}
           className="mx-auto"
-          onPress={() => router.push("../(protected)/(driver)")}
+          onPress={() => router.push("../(protected)/(owner)")}
         >
           <LinearGradient
             colors={["#FFA24C", "#FF7A18"]}

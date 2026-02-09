@@ -29,7 +29,7 @@ const QuickAction: React.FC = () => {
       id: 2,
       title: "Add Driver",
       icon: "account-plus",
-      route: "/AddDriver",  
+      route: "../(owner)/add-driver",  
     },
     {
       id: 3,

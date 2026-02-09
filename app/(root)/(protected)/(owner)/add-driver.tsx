@@ -4,11 +4,15 @@ import {
   Text,
   View,
   TouchableOpacity,
+  StatusBar,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 import Feather from "@expo/vector-icons/Feather";
 import DriverForm from "@/components/DriverForm";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function AddDriverScreen() {
   const [form, setForm] = useState({
@@ -79,11 +83,23 @@ export default function AddDriverScreen() {
     // API CALL HERE
     router.back();
   };
+ const [image, setImage] = useState<string | null>(null);
+   // 📷 Pick Image from gallery
+     const pickImage = async () => {
+       const result = await ImagePicker.launchImageLibraryAsync({
+         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+         quality: 1,
+       });
+   
+       if (!result.canceled) {
+         setImage(result.assets[0].uri);
+       }
+     };
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-4">
+    <SafeAreaView className="flex-1 bg-orange-50 px-4">
       <ScrollView showsVerticalScrollIndicator={false}>
-      
+       <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
         
 
         {/* FORM */}
@@ -92,9 +108,29 @@ export default function AddDriverScreen() {
           errors={errors}
           onChange={handleChange}
         />
-
+       <View className="bg-white rounded-xl p-4 mb-4 gap-2 ">
+        {/* Upload Image */}
+          <Text className="mt-3 font-semibold text-orange-600">Upload License Photo</Text>
+          <TouchableOpacity
+            onPress={pickImage}
+            className="border border-dashed border-orange-300 rounded-lg p-6 mt-2 items-center"
+          >
+            {image ? (
+              <Image source={{ uri: image }} className="w-24 h-24 rounded-lg" />
+            ) : (
+              <>
+                <Ionicons
+                  name="cloud-upload-outline"
+                  size={28}
+                  color="orange"
+                />
+                <Text className="text-gray-300 mt-2">Upload Photo</Text>
+              </>
+            )}
+          </TouchableOpacity>
+          </View>
         {/* LOGIN SETUP */}
-        <View className="bg-orange-50 rounded-xl p-4  ">
+        <View className="bg-white rounded-xl p-4  ">
           <Text className="font-bold text-orange-600 mb-3">
             Driver Login Setup
           </Text>
@@ -143,7 +179,7 @@ export default function AddDriverScreen() {
         </View>
 
         {/* LOGIN INFO */}
-        <View className="bg-orange-50 rounded-xl p-4 mt-6">
+        <View className="bg-white rounded-xl p-4 mt-4">
           <Text className="font-bold text-orange-600 mb-2">
             Driver Login Information
           </Text>
