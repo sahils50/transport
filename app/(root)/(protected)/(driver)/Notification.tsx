@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
+import type { ComponentProps } from "react";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+type IoniconName = ComponentProps<typeof Ionicons>["name"];
 
 type Notification = {
   id: string;
@@ -36,7 +38,16 @@ const mockNotifications: Notification[] = [
 export default function Notification() {
   const [notifications] = useState(mockNotifications);
 
-  const getCardStyles = (type: "warning" | "success") => {
+  const getCardStyles = (
+    type: "warning" | "success",
+  ): {
+    bg: string;
+    border: string;
+    title: string;
+    text: string;
+    icon: IoniconName;
+    iconColor: string;
+  } => {
     if (type === "warning") {
       return {
         bg: "bg-red-50",
@@ -47,6 +58,7 @@ export default function Notification() {
         iconColor: "#dc2626",
       };
     }
+
     return {
       bg: "bg-green-50",
       border: "border-green-200",
