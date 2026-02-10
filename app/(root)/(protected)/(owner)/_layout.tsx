@@ -95,6 +95,39 @@ export default function OwnerLayout() {
           ),
         }}
       />
+<<<<<<< Updated upstream
+=======
+      <Tabs.Screen
+        name="add-vehicle"
+        options={{
+          href: null,
+          title: "Add Vehicle",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Add Vehicle "
+              showBack = {true}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="DelayTrip"
+        options={{
+          href: null,
+          title: "Add Vehicle",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Delay Trips "
+              showBack = {true}
+            />
+          ),
+        }}
+      />
+>>>>>>> Stashed changes
 
       <Tabs.Screen
         name="VehicleScreen"
