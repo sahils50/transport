@@ -41,7 +41,7 @@ const QuickAction: React.FC = () => {
       id: 4,
       title: "Approve Expenses",
       icon: "cash-check",
-      route: "/",
+      route: "../(owner)/ApproveExpenses",
     },
     {
       id: 5,
@@ -53,7 +53,7 @@ const QuickAction: React.FC = () => {
       id: 6,
       title: "Reports",
       icon: "file-chart",
-      route: "/(root)/(protected)/(owner)/ReportScreen",
+      route: "../(owner)/Reports",
     },
   ];
 
