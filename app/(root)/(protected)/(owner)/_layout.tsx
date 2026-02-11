@@ -29,7 +29,7 @@ export default function OwnerLayout() {
         }}
       />
       <Tabs.Screen
-        name="DriverScreen" 
+        name="DriverScreen"
         options={{
           title: "Drivers",
           tabBarIcon: ({ color }) => (
@@ -44,12 +44,12 @@ export default function OwnerLayout() {
             <CustomHeader
               variant="default"
               title="Drivers detail"
-              showBack = {true}
+              showBack={true}
             />
           ),
         }}
       />
-       <Tabs.Screen
+      <Tabs.Screen
         name="DriverProfileScreen"
         options={{
           href: null,
@@ -59,7 +59,7 @@ export default function OwnerLayout() {
             <CustomHeader
               variant="default"
               title="Driver Profile"
-              showBack = {true}
+              showBack={true}
             />
           ),
         }}
@@ -74,7 +74,7 @@ export default function OwnerLayout() {
             <CustomHeader
               variant="default"
               title="Edit Driver Detail"
-              showBack = {true}
+              showBack={true}
             />
           ),
         }}
@@ -90,22 +90,78 @@ export default function OwnerLayout() {
             <CustomHeader
               variant="default"
               title="Add Driver "
-              showBack = {true}
+              showBack={true}
             />
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="ApproveExpenses"
+        options={{
+          href: null,
+          title: "Approve Expenses",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Approve Expenses"
+              showBack={true}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Reports"
+        options={{
+          href: null,
+          title: "Reports",
+          headerShown: true,
+          header: () => (
+            <CustomHeader variant="default" title="Reports" showBack={true} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ExpenseBreakdown"
+        options={{
+          href: null,
+          title: "ExpenseBreakdown",
+          headerShown: true,
+          header: () => (
+            <CustomHeader variant="default" title="ExpenseBreakdown" showBack={true} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="ProfitAnalysis"
+        options={{
+          href: null,
+          title: "ProfitAnalysis",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="ProfitAnalysis"
+              showBack={true}
+            />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="add-vehicle"
         options={{
-          // href: null,
+          href: null,
           title: "Add Driver",
           headerShown: true,
           header: () => (
             <CustomHeader
               variant="default"
               title="Add Vehicle "
-              showBack = {true}
+              showBack={true}
             />
           ),
         }}
@@ -138,11 +194,7 @@ export default function OwnerLayout() {
             />
           ),
           headerShown: true,
-          header: () => (
-            <CustomHeader
-             title="Trips"
-            />
-          ),
+          header: () => <CustomHeader title="Trips" />,
         }}
       />
       <Tabs.Screen
