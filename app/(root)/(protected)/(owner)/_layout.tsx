@@ -156,6 +156,7 @@ export default function OwnerLayout() {
         options={{
           href: null,
           title: "Add Driver",
+          title: "Add Vehicle",
           headerShown: true,
           header: () => (
             <CustomHeader

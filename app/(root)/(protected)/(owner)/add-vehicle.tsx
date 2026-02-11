@@ -36,7 +36,7 @@ export default function AddVehicleScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-orange-50 px-4">
-      {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+      <ScrollView showsVerticalScrollIndicator={false}>
 
         {/* VEHICLE INFO */}
         <View className="bg-white rounded-xl p-4 mt-4 ">
@@ -161,7 +161,8 @@ export default function AddVehicleScreen() {
         </View>
 
         <View className="h-10" />
-      {/* </ScrollView> */}
+      </ScrollView>   
+      </ScrollView>
     </SafeAreaView>
   );
 }
