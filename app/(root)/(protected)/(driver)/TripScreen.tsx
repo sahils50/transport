@@ -119,10 +119,6 @@ export default function TripsScreen() {
   );
 }
 
-// ────────────────────────────────────────────────
-// Reusable Components
-// ────────────────────────────────────────────────
-
 function DetailRow({
   icon,
   label,
