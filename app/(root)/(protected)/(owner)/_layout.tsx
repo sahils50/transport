@@ -95,8 +95,6 @@ export default function OwnerLayout() {
           ),
         }}
       />
-<<<<<<< Updated upstream
-=======
       <Tabs.Screen
         name="add-vehicle"
         options={{
@@ -127,7 +125,6 @@ export default function OwnerLayout() {
           ),
         }}
       />
->>>>>>> Stashed changes
 
       <Tabs.Screen
         name="VehicleScreen"
