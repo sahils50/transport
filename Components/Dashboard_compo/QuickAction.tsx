@@ -35,7 +35,7 @@ const QuickAction: React.FC = () => {
       id: 3,
       title: "Add Vehicle",
       icon: "truck-plus",
-      route: "/(root)/(protected)/(owner)/VehicleScreen",
+      route: "../(owner)/add-vehicle",
     },
     {
       id: 4,
