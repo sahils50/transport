@@ -110,21 +110,6 @@ export default function OwnerLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="DelayTrip"
-        options={{
-          href: null,
-          title: "Add Vehicle",
-          headerShown: true,
-          header: () => (
-            <CustomHeader
-              variant="default"
-              title="Delay Trips "
-              showBack = {true}
-            />
-          ),
-        }}
-      />
 
       <Tabs.Screen
         name="VehicleScreen"

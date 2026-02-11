@@ -162,6 +162,7 @@ export default function AddVehicleScreen() {
 
         <View className="h-10" />
       </ScrollView>   
+      </ScrollView>
     </SafeAreaView>
   );
 }
