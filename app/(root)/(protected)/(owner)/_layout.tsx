@@ -95,6 +95,21 @@ export default function OwnerLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="CreateTrip"
+        options={{
+          // href: null,
+          title: "Add Driver",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Create Trip "
+              showBack={true}
+            />
+          ),
+        }}
+      />
 
       <Tabs.Screen
         name="ApproveExpenses"
