@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 const router = useRouter();
-
+type TripStatus = "scheduled" | "in-progress";
 export default function DriverHome() {
   const [status, setStatus] = useState<TripStatus>("scheduled");
 

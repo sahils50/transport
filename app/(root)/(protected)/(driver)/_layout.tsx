@@ -97,6 +97,18 @@ export default function DriverLayout() {
               color={color}
             />
           ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="My Trip"
+              showBack={false}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
         }}
       />
 
@@ -109,6 +121,18 @@ export default function DriverLayout() {
               name="cash-multiple"
               size={24}
               color={color}
+            />
+          ),
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="Expense"
+              showBack={false}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
             />
           ),
         }}
@@ -124,9 +148,13 @@ export default function DriverLayout() {
           headerShown: true,
           header: () => (
             <CustomHeader
-              variant="greeting"
-              userName="Rahul"
-              subtitle="You have 1 trip scheduled today"
+              variant="title-only"
+              title="Account"
+              showBack={false}
+              showBell={true}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={true}
+              onAvatarPress={() => router.push("/ProfileScreen")}
             />
           ),
         }}
