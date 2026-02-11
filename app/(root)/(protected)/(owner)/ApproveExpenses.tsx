@@ -89,7 +89,7 @@ const ApproveExpenses = () => {
 
         {/* Expense Card */}
 
-        <View className="gap-4 mt-4 px-1">
+        <View  className="gap-4 mt-4 px-1">
           {expenses.map((item) => (
             <View
               key={item.id}

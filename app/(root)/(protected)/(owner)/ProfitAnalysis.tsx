@@ -16,29 +16,28 @@ export default function ProfitAnalysis() {
       </View>
 
       {/* Bar Chart */}
+
       <BarChart
         data={{
           labels: ["Income", "Expense", "Profit"],
           datasets: [
             {
-              data: [190000],
-              colors: [() => "#34d399"], // Green
-            },
-            {
-              data: [70000],
-              colors: [() => "#f87171"], // Red
-            },
-            {
-              data: [120000],
-              colors: [() => "#fb923c"], // Orange
+              data: [190000, 70000, 120000],
+              colors: [
+                () => "#34d399", // Income - Green
+                () => "#f87171", // Expense - Red
+                () => "#fb923c", // Profit - Orange
+              ],
             },
           ],
         }}
         width={screenWidth - 60}
         height={220}
         fromZero
-        withInnerLines
         showValuesOnTopOfBars
+        withInnerLines
+        withCustomBarColorFromData // ⭐ IMPORTANT
+        flatColor // ⭐ IMPORTANT
         yAxisLabel="₹ "
         chartConfig={{
           backgroundGradientFrom: "#ffffff",
