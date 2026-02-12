@@ -1,7 +1,7 @@
 import { HapticTab } from "@/components/haptic-tab";
 import CustomHeader from "@/components/Header";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 
 export default function OwnerLayout() {
   return (
@@ -24,6 +24,9 @@ export default function OwnerLayout() {
               variant="greeting"
               userName="Rahul"
               subtitle="You have 1 trip scheduled today"
+              onBellPress={() =>
+                router.push("/(root)/(protected)/(owner)/Notification")
+              }
             />
           ),
         }}
@@ -145,7 +148,11 @@ export default function OwnerLayout() {
           title: "ExpenseBreakdown",
           headerShown: true,
           header: () => (
-            <CustomHeader variant="default" title="ExpenseBreakdown" showBack={true} />
+            <CustomHeader
+              variant="default"
+              title="ExpenseBreakdown"
+              showBack={true}
+            />
           ),
         }}
       />
@@ -167,11 +174,51 @@ export default function OwnerLayout() {
       />
 
       <Tabs.Screen
+        name="Notification"
+        options={{
+          href: null,
+          title: "Notification",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="Notification"
+              showBack={true}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Profile"
+        options={{
+          href: null,
+          title: "Profile",
+          headerShown: true,
+          header: () => (
+            <CustomHeader variant="default" title="Profile" showBack={true} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="EditPasswrd"
+        options={{
+          href: null,
+          title: "EditPasswrd",
+          headerShown: true,
+          header: () => (
+            <CustomHeader variant="default" title="EditPasswrd" showBack={true} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="add-vehicle"
         options={{
           href: null,
           title: "Add Driver",
-       
+
           headerShown: true,
           header: () => (
             <CustomHeader
