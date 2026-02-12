@@ -24,8 +24,13 @@ export default function OwnerLayout() {
               variant="greeting"
               userName="Rahul"
               subtitle="You have 1 trip scheduled today"
+              showBell={true}
               onBellPress={() =>
                 router.push("/(root)/(protected)/(owner)/Notification")
+              }
+              showAvatar={true}
+              onAvatarPress={() =>
+                router.push("/(root)/(protected)/(owner)/Profile")
               }
             />
           ),
@@ -202,13 +207,33 @@ export default function OwnerLayout() {
       />
 
       <Tabs.Screen
+        name="EditProfile"
+        options={{
+          href: null,
+          title: "EditProfile",
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="default"
+              title="EditProfile"
+              showBack={true}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="EditPasswrd"
         options={{
           href: null,
           title: "EditPasswrd",
           headerShown: true,
           header: () => (
-            <CustomHeader variant="default" title="EditPasswrd" showBack={true} />
+            <CustomHeader
+              variant="default"
+              title="EditPasswrd"
+              showBack={true}
+            />
           ),
         }}
       />

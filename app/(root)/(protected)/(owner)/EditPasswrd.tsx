@@ -112,10 +112,7 @@ export default function ChangePassword() {
         </View>
 
         {/* Forgot Password */}
-        <TouchableOpacity
-          onPress={() => router.push("/")}
-          className="mt-4"
-        >
+        <TouchableOpacity onPress={() => router.push("/")} className="mt-4">
           <Text className="text-orange-500 font-medium text-right">
             Forgot Password?
           </Text>
@@ -123,7 +120,10 @@ export default function ChangePassword() {
       </View>
 
       {/* Update Button */}
-      <TouchableOpacity className="mt-8 bg-orange-500 rounded-xl p-4 shadow-md active:opacity-80">
+      <TouchableOpacity
+        onPress={() => router.push("/(root)/(protected)/(owner)/Profile")}
+        className="mt-8 bg-orange-500 rounded-xl p-4 shadow-md active:opacity-80"
+      >
         <View className="flex-row justify-center items-center">
           <Ionicons name="lock-closed-outline" size={20} color="white" />
           <Text className="text-white text-base font-semibold ml-2">
