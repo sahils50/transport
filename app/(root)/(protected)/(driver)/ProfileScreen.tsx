@@ -45,7 +45,7 @@ export default function ProfileScreen() {
         License Status
       </Text>
       <View className="mt-2 bg-orange-100 rounded-lg p-3 flex-row items-center">
-        <FontAwesome name="id-card" size={24} color="orange" />{" "}
+        <FontAwesome name="id-card" size={24} color="orange" />
         {/* Approximation for driving license icon */}
         <Text className="ml-2 text-base text-gray-800">Driving License</Text>
         <View className="ml-auto flex-row items-center">
