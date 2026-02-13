@@ -8,6 +8,7 @@ import Performance from "@/components/Dashboard_compo/Performance";
 import CostEstimation from "@/components/Dashboard_compo/CostEstimation";
 import ExpensesRules from "@/components/Dashboard_compo/ExpensesRules";
 import ReviewAndCreate from "@/components/Dashboard_compo/ReviewAndCreate";
+import ScheduleTrip from "@/components/Dashboard_compo/ScheduleTrip";
 // import LiveTripsmap from "@/components/Dashboard_compo/LiveTripsmap";
 
 type StatItem = {
@@ -109,12 +110,16 @@ const Dashboard: React.FC = () => {
           <QuickAction />
         </View>
 
-        <View className="mt-4">
+        <View className="">
           <ExpensesAnalysis />
         </View>
 
-        <View className="mt-4">
+        <View className="">
           <Performance />
+        </View>
+{/* 
+        <View className="">
+          <ScheduleTrip />
         </View>
 
         <View className="">
@@ -127,8 +132,7 @@ const Dashboard: React.FC = () => {
 
         <View className="">
           <ReviewAndCreate />
-        </View>
-        
+        </View> */}
       </SafeAreaView>
     </ScrollView>
   );
