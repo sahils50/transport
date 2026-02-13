@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ScrollView, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function ExpenseScreen() {
   return (
@@ -111,7 +112,6 @@ export default function ExpenseScreen() {
   );
 }
 
-// Reusable Past Trip Card
 function PastTripCard({
   route,
   tripId,
@@ -131,34 +131,45 @@ function PastTripCard({
   approvalColor: string;
   amount: string;
 }) {
+  const router = useRouter();
+  const handlePress = () => {
+    router.push(`/ExpenseDetails`);
+  };
+
   return (
-    <View className="bg-white rounded-2xl shadow-sm border border-gray-200/70 overflow-hidden">
-      {/* Top row - route + budget status */}
-      <View className="px-5 pt-5 pb-3 flex-row items-center justify-between border-b border-gray-100">
-        <Text className="text-lg font-semibold text-gray-900">{route}</Text>
+    <TouchableOpacity
+      activeOpacity={0.75}
+      onPress={handlePress}
+      className="mb-4" // spacing between cards
+    >
+      <View className="bg-white rounded-2xl shadow-sm border border-gray-200/70 overflow-hidden">
+        {/* Top row - route + budget status */}
+        <View className="px-5 pt-5 pb-3 flex-row items-center justify-between border-b border-gray-100">
+          <Text className="text-lg font-semibold text-gray-900">{route}</Text>
 
-        <View className={`${budgetColor} px-3 py-1 rounded-full`}>
-          <Text className="text-sm font-medium">{budgetStatus}</Text>
+          <View className={`${budgetColor} px-3 py-1 rounded-full`}>
+            <Text className="text-sm font-medium">{budgetStatus}</Text>
+          </View>
         </View>
-      </View>
 
-      {/* Trip ID & Date */}
-      <View className="px-5 py-3 border-b border-gray-100">
-        <Text className="text-base font-medium text-gray-800">
-          {tripId} {date}
-        </Text>
-      </View>
-
-      {/* Amount + Approval status */}
-      <View className="px-5 py-4 flex-row items-center justify-between">
-        <Text className="text-2xl font-bold text-gray-900">{amount}</Text>
-
-        <View className={`${approvalColor} px-3 py-1.5 rounded-full`}>
-          <Text className="text-sm font-medium">
-            {approvalStatus === "Approved" ? "✓ Approved" : "✗ Rejected"}
+        {/* Trip ID & Date */}
+        <View className="px-5 py-3 border-b border-gray-100">
+          <Text className="text-base font-medium text-gray-800">
+            {tripId} {date}
           </Text>
         </View>
+
+        {/* Amount + Approval status */}
+        <View className="px-5 py-4 flex-row items-center justify-between">
+          <Text className="text-2xl font-bold text-gray-900">{amount}</Text>
+
+          <View className={`${approvalColor} px-3 py-1.5 rounded-full`}>
+            <Text className="text-sm font-medium">
+              {approvalStatus === "Approved" ? "✓ Approved" : "✗ Rejected"}
+            </Text>
+          </View>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
