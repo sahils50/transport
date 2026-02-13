@@ -44,7 +44,7 @@ const ExpensesAnalysis = () => {
     <ScrollView>
       <SafeAreaView>
         <View>
-          <View className="p-2 bg-white rounded-2xl border border-gray-300 shadow-md shadow-black/30 ">
+          <View className="p-2 bg-white rounded-2xl border border-gray-300  shadow-black/30 ">
             <View className="flex-row items-center justify-between pr-3 py-3 ">
               {/* Left: Icon + Title */}
               <View className="flex-row items-center gap-2">
@@ -124,7 +124,7 @@ const ExpensesAnalysis = () => {
           </View>
 
           <View
-            className="mt-4 bg-green-50 rounded-2xl overflow-hidden
+            className="mt-8 bg-green-50 rounded-2xl overflow-hidden
              border border-green-500
              shadow-lg shadow-black/25 elevation-6"
           >

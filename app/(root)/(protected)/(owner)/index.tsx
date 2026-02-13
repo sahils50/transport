@@ -5,6 +5,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import QuickAction from "@/components/Dashboard_compo/QuickAction";
 import ExpensesAnalysis from "@/components/Dashboard_compo/ExpensesAnalysis";
 import Performance from "@/components/Dashboard_compo/Performance";
+import CostEstimation from "@/components/Dashboard_compo/CostEstimation";
+import ExpensesRules from "@/components/Dashboard_compo/ExpensesRules";
+import ReviewAndCreate from "@/components/Dashboard_compo/ReviewAndCreate";
 // import LiveTripsmap from "@/components/Dashboard_compo/LiveTripsmap";
 
 type StatItem = {
@@ -76,8 +79,6 @@ const Dashboard: React.FC = () => {
                 />
               </View>
 
-              
-
               <View>
                 <Text className="text-xl font-bold text-gray-900">
                   {item.count}
@@ -115,6 +116,19 @@ const Dashboard: React.FC = () => {
         <View className="mt-4">
           <Performance />
         </View>
+
+        <View className="">
+          <CostEstimation />
+        </View>
+
+        <View className="">
+          <ExpensesRules />
+        </View>
+
+        <View className="">
+          <ReviewAndCreate />
+        </View>
+        
       </SafeAreaView>
     </ScrollView>
   );
