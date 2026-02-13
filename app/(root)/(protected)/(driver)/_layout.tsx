@@ -159,6 +159,24 @@ export default function DriverLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="ExpenseDetails"
+        options={{
+          href: null,
+          headerShown: true,
+          header: () => (
+            <CustomHeader
+              variant="title-only"
+              title="ExpenseDetails"
+              showBack={true}
+              showBell={false}
+              onBellPress={() => router.push("/Notification")}
+              showAvatar={false}
+              onAvatarPress={() => router.push("/ProfileScreen")}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
