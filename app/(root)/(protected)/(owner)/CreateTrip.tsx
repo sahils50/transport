@@ -11,6 +11,7 @@ import {
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Drivervehicles from "@/components/Drivervehicles";
+import RouteAndDestination from "@/components/RouteAndDestination";
 
 
 
@@ -33,7 +34,7 @@ const CreateTrip = () => {
           Auto generated on creation
         </Text>
        <Drivervehicles/>
-        
+        <RouteAndDestination/>
       </ScrollView>
     </SafeAreaView>
   );
