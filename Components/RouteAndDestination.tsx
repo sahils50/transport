@@ -5,7 +5,7 @@ import { Feather, FontAwesome5, FontAwesome6 } from '@expo/vector-icons'
 const RouteAndDestination = () => {
    const [focused, setFocused] = useState(false);
   return (
-    <View className="bg-white rounded-xl p-4 mt-4 shadow-md">
+    <View className="bg-white rounded-xl p-4 mt-4">
       <View className='flex-row gap-2'>
       <FontAwesome5 name="route" size={24} color="#F78231" />
       <Text className="text-lg font-semibold text-gray-600 mb-2">Route and Destination</Text>
@@ -15,7 +15,7 @@ const RouteAndDestination = () => {
       <View
       onFocus={()=> setFocused(true)}
       onBlur={()=> setFocused(false)}
-      className={`flex-row items-center rounded-lg px-4 py-3 bg-gray-100 border ${
+      className={`flex-row items-center rounded-lg px-4 py-1 bg-gray-100 border ${
         focused ? "border-orange-500" : "border-gray-300"
       }`}
     >
@@ -38,7 +38,7 @@ const RouteAndDestination = () => {
       <View
       onFocus={()=> setFocused(true)}
       onBlur={()=> setFocused(false)}
-      className={`flex-row items-center rounded-lg px-4 py-3 bg-gray-100 border ${
+      className={`flex-row items-center rounded-lg px-4 py-1 bg-gray-100 border ${
         focused ? "border-orange-500" : "border-gray-300"
       }`}
     >

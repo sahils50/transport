@@ -65,7 +65,7 @@ const Drivervehicles = () => {
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
   const [selectedVehicle, setselectedVehicle] = useState<Vehicle | null>(null);
   return (
-    <View className="bg-white rounded-xl p-4 mt-4 ">
+    <View className="bg-white rounded-xl p-4 mt-4">
       <View className="flex-row gap-2 items-center">
         <View className="flex-row gap-1 border-[1.5px] border-orange-400 rounded-md  p-1 w-12">
           <Ionicons name="person" size={14} color="orange" />

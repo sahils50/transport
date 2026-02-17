@@ -23,7 +23,7 @@ const QuickAction: React.FC = () => {
       id: 1,
       title: "Create Trip",
       icon: "map-marker-plus",
-      route: "/(root)/(protected)/(owner)/TripScreen",
+      route: "../(owner)/CreateTrip",
     },
     {
       id: 2,
