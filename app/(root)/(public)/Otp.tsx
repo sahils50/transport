@@ -1,13 +1,11 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useRef, useState } from "react";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-// import ActionButton from "@/components/actionbutton";
-import ActionButton from "@/components/ActionButton";
-import { router } from "expo-router";
-import { useLocalSearchParams } from "expo-router";
+// import ActionButton from "@/Components/actionbutton";
+import ActionButton from "@/Components/ActionButton";
+import { router, useLocalSearchParams } from "expo-router";
 
-
-// import ActionButton from "@/components/ActionButton";
+// import ActionButton from "@/Components/ActionButton";
 
 export default function OtpScreen() {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", ""]);
@@ -15,7 +13,6 @@ export default function OtpScreen() {
   const inputs = useRef<(TextInput | null)[]>([]);
 
   const { from } = useLocalSearchParams<{ from?: string }>();
-
 
   const handleChange = (value: string, index: number) => {
     if (!/^\d?$/.test(value)) return;
@@ -56,8 +53,10 @@ export default function OtpScreen() {
       </View>
 
       {/* Continue Button */}
-      <ActionButton label="Verify" 
-      onPress={()=> router.push("../(public)/Resetpass")}/>
+      <ActionButton
+        label="Verify"
+        onPress={() => router.push("../(public)/Resetpass")}
+      />
 
       {/* Resend */}
       <View className="flex-row justify-center mt-4">
@@ -66,16 +65,15 @@ export default function OtpScreen() {
       </View>
 
       {from === "driver" && (
-  <TouchableOpacity
-    className="mt-4"
-    onPress={() => router.push("../(public)/SelectContactMethod")}
-  >
-    <Text className="text-center text-blue-500 text-sm">
-      Need help? Contact Owner
-    </Text>
-  </TouchableOpacity>
-)}
-
+        <TouchableOpacity
+          className="mt-4"
+          onPress={() => router.push("../(public)/SelectContactMethod")}
+        >
+          <Text className="text-center text-blue-500 text-sm">
+            Need help? Contact Owner
+          </Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }

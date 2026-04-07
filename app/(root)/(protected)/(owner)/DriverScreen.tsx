@@ -1,3 +1,7 @@
+import { FontAwesome5 } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import {
   FlatList,
@@ -7,12 +11,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Feather from "@expo/vector-icons/Feather";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { FontAwesome5 } from "@expo/vector-icons";
 // import DriverProfileScreen from "./DriverProfileScreen";
-import ActionPopup, { PopupType } from "@/components/ActionPopup";
+import ActionPopup, { PopupType } from "@/Components/ActionPopup";
 import { router } from "expo-router";
 
 /* ---------------- TYPES ---------------- */

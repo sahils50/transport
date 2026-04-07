@@ -1,4 +1,3 @@
-import CustomHeader from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
 import { useState } from "react";

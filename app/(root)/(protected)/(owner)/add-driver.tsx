@@ -1,18 +1,18 @@
+import DriverForm from "@/Components/DriverForm";
+import { Ionicons } from "@expo/vector-icons";
+import Feather from "@expo/vector-icons/Feather";
+import * as ImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
-  ScrollView,
-  Text,
-  View,
-  TouchableOpacity,
-  StatusBar,
   Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
-import Feather from "@expo/vector-icons/Feather";
-import DriverForm from "@/components/DriverForm";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function AddDriverScreen() {
   const [form, setForm] = useState({
@@ -24,13 +24,9 @@ export default function AddDriverScreen() {
     licenseExpiry: "",
   });
 
-  const [errors, setErrors] = useState<
-    Record<string, string>
-  >({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [loginSetup, setLoginSetup] = useState<
-    "INVITE" | "LATER"
-  >("INVITE");
+  const [loginSetup, setLoginSetup] = useState<"INVITE" | "LATER">("INVITE");
 
   const handleChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -51,25 +47,19 @@ export default function AddDriverScreen() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!form.name.trim())
-      newErrors.name = "Name is required";
+    if (!form.name.trim()) newErrors.name = "Name is required";
 
-    if (!form.phone.trim())
-      newErrors.phone = "Phone number is required";
+    if (!form.phone.trim()) newErrors.phone = "Phone number is required";
     else if (form.phone.length < 10)
       newErrors.phone = "Enter valid phone number";
 
     if (!form.licenseNumber.trim())
-      newErrors.licenseNumber =
-        "License number is required";
+      newErrors.licenseNumber = "License number is required";
 
-    if (!form.licenseType)
-      newErrors.licenseType =
-        "License type is required";
+    if (!form.licenseType) newErrors.licenseType = "License type is required";
 
     if (!form.licenseExpiry.trim())
-      newErrors.licenseExpiry =
-        "Expiry date is required";
+      newErrors.licenseExpiry = "Expiry date is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -83,34 +73,31 @@ export default function AddDriverScreen() {
     // API CALL HERE
     router.back();
   };
- const [image, setImage] = useState<string | null>(null);
-   // 📷 Pick Image from gallery
-     const pickImage = async () => {
-       const result = await ImagePicker.launchImageLibraryAsync({
-         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-         quality: 1,
-       });
-   
-       if (!result.canceled) {
-         setImage(result.assets[0].uri);
-       }
-     };
+  const [image, setImage] = useState<string | null>(null);
+  // 📷 Pick Image from gallery
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-orange-50 px-4">
       <ScrollView showsVerticalScrollIndicator={false}>
-       <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
-        
+        <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
 
         {/* FORM */}
-        <DriverForm
-          form={form}
-          errors={errors}
-          onChange={handleChange}
-        />
-       <View className="bg-white rounded-xl p-4 mb-4 gap-2 ">
-        {/* Upload Image */}
-          <Text className="mt-3 font-semibold text-orange-600">Upload License Photo</Text>
+        <DriverForm form={form} errors={errors} onChange={handleChange} />
+        <View className="bg-white rounded-xl p-4 mb-4 gap-2 ">
+          {/* Upload Image */}
+          <Text className="mt-3 font-semibold text-orange-600">
+            Upload License Photo
+          </Text>
           <TouchableOpacity
             onPress={pickImage}
             className="border border-dashed border-orange-300 rounded-lg p-6 mt-2 items-center"
@@ -128,7 +115,7 @@ export default function AddDriverScreen() {
               </>
             )}
           </TouchableOpacity>
-          </View>
+        </View>
         {/* LOGIN SETUP */}
         <View className="bg-white rounded-xl p-4  ">
           <Text className="font-bold text-orange-600 mb-3">
@@ -168,9 +155,7 @@ export default function AddDriverScreen() {
               }`}
             />
             <View>
-              <Text className="font-semibold">
-                Activate Later
-              </Text>
+              <Text className="font-semibold">Activate Later</Text>
               <Text className="text-gray-500 text-sm">
                 Driver saved but inactive
               </Text>
@@ -187,9 +172,8 @@ export default function AddDriverScreen() {
           <View className="flex-row gap-2">
             <Feather name="info" size={16} color="orange" />
             <Text className="text-gray-700 text-sm">
-              • Phone Number (entered above){"\n"}
-              • OTP sent to that number{"\n"}
-              • Business Code: TRANSA2026
+              • Phone Number (entered above){"\n"}• OTP sent to that number
+              {"\n"}• Business Code: TRANSA2026
             </Text>
           </View>
         </View>
@@ -199,14 +183,10 @@ export default function AddDriverScreen() {
           onPress={handleAddDriver}
           disabled={!isFormValid()}
           className={`rounded-xl py-4 mt-6 items-center ${
-            isFormValid()
-              ? "bg-orange-500"
-              : "bg-gray-300"
+            isFormValid() ? "bg-orange-500" : "bg-gray-300"
           }`}
         >
-          <Text className="text-white font-bold text-lg">
-            Add Driver
-          </Text>
+          <Text className="text-white font-bold text-lg">Add Driver</Text>
         </TouchableOpacity>
 
         <View className="h-10" />

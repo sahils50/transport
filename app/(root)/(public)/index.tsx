@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
-// import ActionButton from "@/components/actionbutton";
+// import ActionButton from "@/Components/actionbutton";
+import ActionButton from "@/Components/ActionButton";
 import { useRouter } from "expo-router";
-import ActionButton from "@/components/ActionButton";
 
 type Role = "owner" | "driver";
 
