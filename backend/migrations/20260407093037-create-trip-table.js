@@ -4,10 +4,6 @@ var dbm;
 var type;
 var seed;
 
-/**
- * We receive the dbmigrate dependency from dbmigrate initially.
- * This enables us to not have to rely on NODE_PATH.
- */
 exports.setup = function (options, seedLink) {
   dbm = options.dbmigrate;
   type = dbm.dataType;
@@ -30,11 +26,15 @@ exports.up = function (db, callback) {
       destination_coordinates   POINT NOT NULL,
       scheduled_start_at        DATETIME NOT NULL,
       scheduled_end_at          DATETIME NOT NULL,
+      actual_start_at           DATETIME,
+      actual_end_at             DATETIME,
       trip_type                 ENUM('single','return') NOT NULL,
+      trip_status               ENUM('scheduled','in_transit','completed','cancelled','delayed') NOT NULL DEFAULT 'scheduled',
       fuel_limit                INT NOT NULL DEFAULT 0,
       toll_limit                INT NOT NULL DEFAULT 0,
       other_cost_limit          INT NOT NULL DEFAULT 0,
       notes                     TEXT,
+      cancellation_reason       TEXT,
       is_active                 TINYINT(1) NOT NULL DEFAULT 1,
       created_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
