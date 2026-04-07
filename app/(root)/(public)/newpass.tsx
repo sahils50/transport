@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, TouchableOpacity, Animated } from "react-native";
+import ActionButton from "@/Components/ActionButton";
 import { Ionicons } from "@expo/vector-icons";
-import ActionButton from "@/components/ActionButton";
 import { router } from "expo-router";
+import React, { useEffect, useRef } from "react";
+import { Animated, Text, View } from "react-native";
 
 const PasswordResetSuccess: React.FC = () => {
   // animation value
@@ -41,9 +41,11 @@ const PasswordResetSuccess: React.FC = () => {
       </Text>
 
       {/* Button */}
-      <ActionButton label=" ← Back to Login"
-      onPress={()=>router.push("../(public)")}
-      buttonClassName= "px-16"/>
+      <ActionButton
+        label=" ← Back to Login"
+        onPress={() => router.push("../(public)")}
+        buttonClassName="px-16"
+      />
     </View>
   );
 };

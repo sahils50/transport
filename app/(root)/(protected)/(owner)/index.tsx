@@ -1,15 +1,11 @@
-import React from "react";
-import { View, Text,  ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import ExpensesAnalysis from "@/Components/Dashboard_compo/ExpensesAnalysis";
+import Performance from "@/Components/Dashboard_compo/Performance";
+import QuickAction from "@/Components/Dashboard_compo/QuickAction";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import QuickAction from "@/components/Dashboard_compo/QuickAction";
-import ExpensesAnalysis from "@/components/Dashboard_compo/ExpensesAnalysis";
-import Performance from "@/components/Dashboard_compo/Performance";
-import CostEstimation from "@/components/Dashboard_compo/CostEstimation";
-import ExpensesRules from "@/components/Dashboard_compo/ExpensesRules";
-import ReviewAndCreate from "@/components/Dashboard_compo/ReviewAndCreate";
-import ScheduleTrip from "@/components/Dashboard_compo/ScheduleTrip";
-// import LiveTripsmap from "@/components/Dashboard_compo/LiveTripsmap";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+// import LiveTripsmap from "@/Components/Dashboard_compo/LiveTripsmap";
 
 type StatItem = {
   id: number;
@@ -117,7 +113,7 @@ const Dashboard: React.FC = () => {
         <View className="">
           <Performance />
         </View>
-{/* 
+        {/* 
         <View className="">
           <ScheduleTrip />
         </View>

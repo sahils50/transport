@@ -1,15 +1,15 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import {
-  View,
+  ScrollView,
   Text,
   TextInput,
-  ScrollView,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
-// import ActionButton from "@/components/actionbutton";
-import ActionButton from "@/components/ActionButton";
+// import ActionButton from "@/Components/actionbutton";
+import ActionButton from "@/Components/ActionButton";
 import { router } from "expo-router";
 
 export default function ResetPass() {
@@ -26,8 +26,7 @@ export default function ResetPass() {
   const isPasswordValid =
     hasMinLength && hasUppercase && hasNumber && hasSpecialChar;
 
-  const isPasswordMatch =
-    password.length > 0 && password === confirmPassword;
+  const isPasswordMatch = password.length > 0 && password === confirmPassword;
 
   const isFormValid = isPasswordValid && isPasswordMatch;
 
@@ -61,9 +60,7 @@ export default function ResetPass() {
             autoCapitalize="none"
             className="flex-1"
           />
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-          >
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Ionicons
               name={showPassword ? "eye-off-outline" : "eye-outline"}
               size={22}
@@ -77,10 +74,7 @@ export default function ResetPass() {
           <Rule text="At least 8 characters" valid={hasMinLength} />
           <Rule text="One uppercase letter" valid={hasUppercase} />
           <Rule text="One number" valid={hasNumber} />
-          <Rule
-            text="One special character"
-            valid={hasSpecialChar}
-          />
+          <Rule text="One special character" valid={hasSpecialChar} />
         </View>
 
         {/* Confirm Password */}
@@ -117,13 +111,7 @@ export default function ResetPass() {
 }
 
 /* 🔹 Password Rule Component (inline, simple) */
-function Rule({
-  text,
-  valid,
-}: {
-  text: string;
-  valid: boolean;
-}) {
+function Rule({ text, valid }: { text: string; valid: boolean }) {
   return (
     <View className="flex-row items-center mb-1">
       <Ionicons
@@ -132,9 +120,7 @@ function Rule({
         color={valid ? "#16A34A" : "#9CA3AF"}
       />
       <Text
-        className={`ml-2 text-xs ${
-          valid ? "text-green-600" : "text-gray-500"
-        }`}
+        className={`ml-2 text-xs ${valid ? "text-green-600" : "text-gray-500"}`}
       >
         {text}
       </Text>
