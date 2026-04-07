@@ -5,18 +5,25 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
-  Modal,
-  FlatList,
-} from "react-native";
+} 
+from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Drivervehicles from "@/components/Drivervehicles";
 import RouteAndDestination from "@/components/RouteAndDestination";
+import Tripschedule from "@/components/Tripschedule";
+import Triptype from "@/components/Triptype";
+import ExpenseRule from "@/components/ExpenseRule";
+import Review from "@/components/Review";
+import { Feather } from "@expo/vector-icons";
+import { router } from "@/.expo/types/router";
 
 
+type Props = {
+  onCreate: () => void;
+};
 
-
-const CreateTrip = () => {
+const CreateTrip = ({ onCreate }: Props) => {
  
 
   return (
@@ -34,7 +41,45 @@ const CreateTrip = () => {
           Auto generated on creation
         </Text>
        <Drivervehicles/>
-        <RouteAndDestination/>
+       <RouteAndDestination/>
+       <Triptype/>
+       <Tripschedule/>
+       <ExpenseRule/>
+       <Review
+       route={{ from: "Mumbai", to: "Goa" }}
+  schedule={new Date("2024-01-01T09:45:00")}
+  vehicleNumber="MH-12-AB-1234"
+  driverName="Rajesh Kumar"
+  estimatedCost={16275}
+  expenseLimit={16275}/>
+
+
+     <View className="flex-row gap-4 my-6">
+      {/* CANCEL */}
+      <TouchableOpacity
+        activeOpacity={0.7}
+        // onPress={() => router.back()}
+        className="flex-1 border bg-white border-gray-300 rounded-xl py-4 items-center flex-row justify-center gap-2"
+      >
+        <Feather name="x" size={20} color="#374151" />
+        <Text className="text-gray-700 font-semibold text-lg">
+          Cancel
+        </Text>
+      </TouchableOpacity>
+
+      {/* CREATE TRIP */}
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={onCreate}
+        className="flex-1 bg-orange-500 rounded-xl py-4 items-center flex-row justify-center gap-2"
+      >
+        <Feather name="check" size={20} color="white" />
+        <Text className="text-white font-bold text-lg">
+          Create Trip
+        </Text>
+      </TouchableOpacity>
+    </View>
+
       </ScrollView>
     </SafeAreaView>
   );
