@@ -44,4 +44,4 @@ app-example
 
 /generated/prisma
 
-.env*
+.env
