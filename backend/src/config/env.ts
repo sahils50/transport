@@ -10,7 +10,7 @@ const envSchema = z.object({
   DATABASE_USER: z.string().min(1),
   DATABASE_PASSWORD: z.string(),
   DATABASE_NAME: z.string().min(1),
-  JWT_SECRET: z.string().min(10, "JWT_SECRET must be at least 32 characters"),
+  JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("7d"),
   SERVER_PORT: z.string(),
 });
