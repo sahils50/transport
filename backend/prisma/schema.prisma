@@ -9,6 +9,7 @@ datasource db {
 
 model admin {
   admin_id                                     Int            @id @default(autoincrement())
+  admin_name                                   String?        @db.VarChar(200)
   email_address                                String         @unique(map: "email_address") @db.VarChar(255)
   password                                     String?        @db.VarChar(255)
   business_name                                String?        @db.VarChar(200)
