@@ -1,15 +1,28 @@
 import { Router } from "express";
-import {
-  createAdminController,
-  loginAdminController,
-} from "../../controllers/admin.controller";
 import { validate } from "../../middlewares/validate.middleware";
 import { loginAdminSchema } from "../../schemas/auth.schema";
 import { authRateLimiter } from "../../config/rateLimiter";
-import { getDrivers } from "../../controllers/admin.controller";
 import { authenticate } from "../../middlewares/auth.middleware";
-import { createAdminSchema } from "../../schemas/admin.schema";
-
+import {
+  createAdminSchema,
+  updateAdminSchema,
+  changePasswordSchema,
+} from "../../schemas/admin.schema";
+import { createDriverSchema } from "../../schemas/driver.schema";
+import {
+  handleUpdateProfile,
+  createDriverController,
+  createAdminController,
+  loginAdminController,
+  getAdminProfile,
+  getDrivers,
+  handleChangePassword,
+  getDashboardFeed,
+} from "../../controllers/admin.controller";
+import {
+  DashboardFilterInput,
+  dashboardFilterSchema,
+} from "../../schemas/dashboard.schema";
 const router = Router();
 /**
  * @swagger
@@ -192,6 +205,130 @@ router.post(
   createAdminController,
 );
 
+router.get("/profile", authRateLimiter, authenticate, getAdminProfile);
+/**
+ * @swagger
+ * /api/v1/admin/createDriver:
+ *   post:
+ *     summary: Create a new driver
+ *     tags: [Drivers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - admin_id
+ *               - driver_name
+ *               - driver_phone_no1
+ *               - driver_license_no
+ *               - driver_license_type
+ *               - driver_license_expiry_date
+ *             properties:
+ *               admin_id:
+ *                 type: integer
+ *                 example: 1
+ *               driver_name:
+ *                 type: string
+ *                 example: Jackson Storm
+ *               driver_phone_no1:
+ *                 type: string
+ *                 example: "9988776655"
+ *               driver_phone_no2:
+ *                 type: string
+ *                 nullable: true
+ *                 example: "9876543210"
+ *               driver_license_no:
+ *                 type: string
+ *                 example: LIC-998877
+ *               driver_license_type:
+ *                 type: string
+ *                 example: Heavy Vehicle
+ *               driver_license_expiry_date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: 2028-12-31T00:00:00.000Z
+ *     responses:
+ *       201:
+ *         description: Driver created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Driver create successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     driver_id:
+ *                       type: integer
+ *                       example: 1
+ *                     admin_id:
+ *                       type: integer
+ *                       example: 1
+ *                     driver_name:
+ *                       type: string
+ *                     driver_phone_no1:
+ *                       type: string
+ *                     driver_phone_no2:
+ *                       type: string
+ *                       nullable: true
+ *                     driver_license_no:
+ *                       type: string
+ *                     driver_license_type:
+ *                       type: string
+ *                     driver_license_expiry_date:
+ *                       type: string
+ *                       format: date-time
+ *                     is_active:
+ *                       type: boolean
+ *                       example: true
+ *                     created_at:
+ *                       type: string
+ *                       format: date-time
+ *                     updated_at:
+ *                       type: string
+ *                       format: date-time
+ *       409:
+ *         description: Driver already exists (phone or license conflict)
+ *       500:
+ *         description: Internal server error
+ */
+router.post(
+  "/createDriver",
+  authRateLimiter,
+  validate(createDriverSchema),
+  authenticate,
+  createDriverController,
+);
+router.patch(
+  "/profile",
+  authRateLimiter,
+  authenticate,
+  validate(updateAdminSchema),
+  handleUpdateProfile,
+);
+router.patch(
+  "/change-password",
+  authRateLimiter,
+  authenticate,
+  validate(changePasswordSchema),
+  handleChangePassword,
+);
+
+router.get(
+  "/dashboard",
+  authRateLimiter,
+  authenticate,
+  validate(dashboardFilterSchema),
+  getDashboardFeed,
+);
 // Protected routes (add authenticate middleware)
 // router.get("/profile",authRateLimiter, authenticate, getAdminProfileController);
 // router.patch("/profile", authenticate, validate(updateAdminSchema), updateAdminController);
