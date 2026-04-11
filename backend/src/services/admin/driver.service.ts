@@ -52,4 +52,35 @@ export const postNewDriver = async (data: CreateDriverInput) => {
   });
 };
 
-export const getDriverInfoById = async () => {};
+export const getDriverInfoById = async (
+  driver_id: number,
+  admin_id: number,
+) => {
+  const driver = await prisma.driver.findFirst({
+    where: {
+      driver_id,
+      admin_id,
+      is_active: true,
+    },
+    select: {
+      driver_id: true,
+      driver_name: true,
+      driver_phone_no1: true,
+      driver_phone_no2: true,
+      driver_license_no: true,
+      driver_license_type: true,
+      driver_license_expiry_date: true,
+      driver_profile_picture_url: true,
+      is_active: true,
+      created_at: true,
+      updated_at: true,
+      _count: {
+        select: { trip: true },
+      },
+    },
+  });
+  if (!driver) {
+    throw new AppError("Driver profile not found or access denied", 404);
+  }
+  return driver;
+};

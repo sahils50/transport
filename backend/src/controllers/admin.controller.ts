@@ -4,6 +4,7 @@ import { loginAdmin, createAdmin } from "../services/admin/auth.service";
 import { AppError } from "../utils/AppError";
 import {
   getAllActiveDrivers,
+  getDriverInfoById,
   postNewDriver,
 } from "../services/admin/driver.service";
 import {
@@ -152,6 +153,25 @@ export const getDashboardFeed = async (
     return res.status(200).json({
       success: true,
       data,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleGetDriverDetails = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const admin_id = req.admin?.admin_id;
+    if (!admin_id) throw new AppError("Unauthorized", 401);
+    const driver = await getDriverInfoById(Number(id), admin_id);
+    return res.status(200).json({
+      success: true,
+      data: driver,
     });
   } catch (err) {
     next(err);

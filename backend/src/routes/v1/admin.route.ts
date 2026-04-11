@@ -18,6 +18,7 @@ import {
   getDrivers,
   handleChangePassword,
   getDashboardFeed,
+  handleGetDriverDetails,
 } from "../../controllers/admin.controller";
 import {
   DashboardFilterInput,
@@ -328,6 +329,13 @@ router.get(
   authenticate,
   validate(dashboardFilterSchema),
   getDashboardFeed,
+);
+
+router.get(
+  "/driver/:id",
+  authRateLimiter,
+  authenticate,
+  handleGetDriverDetails,
 );
 // Protected routes (add authenticate middleware)
 // router.get("/profile",authRateLimiter, authenticate, getAdminProfileController);
