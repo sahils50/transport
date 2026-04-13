@@ -14,3 +14,31 @@ export const createExpenseSchema = z.object({
     reviewed_by: z.number().int().nullable().optional(),
   }),
 });
+
+export const getExpensesQuerySchema = z.object({
+  query: z.object({
+    page: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val) : 1)),
+    limit: z
+      .string()
+      .optional()
+      .transform((val) => (val ? parseInt(val) : 10)),
+    status: z.enum(["pending", "paid", "rejected"]).optional(),
+  }),
+});
+
+export type GetExpensesQueryInput = z.infer<
+  typeof getExpensesQuerySchema
+>["query"];
+
+export const reviewExpenseSchema = z.object({
+  body: z.object({
+    expense_id: z.number().int(),
+    status: z.enum(["paid", "rejected"]), // Admin can only move to paid or rejected
+    notes: z.string().optional(),
+  }),
+});
+
+export type ReviewExpenseInput = z.infer<typeof reviewExpenseSchema>["body"];

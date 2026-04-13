@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const createTripSchema = z.object({
   body: z.object({
-    admin_id: z.number().int(),
     trip_code: z.string().max(20),
     trip_name: z.string().max(200),
     vehicle_id: z.number().int(),
@@ -32,3 +31,15 @@ export const createTripSchema = z.object({
     actual_end_at: z.coerce.date().nullable().optional(),
   }),
 });
+
+export const getTripsQuerySchema = z.object({
+  query: z.object({
+    page: z.string().optional().default("1"),
+    limit: z.string().optional().default("10"),
+    status: z
+      .enum(["scheduled", "in_transit", "completed", "cancelled", "delayed"])
+      .optional(),
+  }),
+});
+
+export type GetTripsQueryInput = z.infer<typeof getTripsQuerySchema>["query"];
