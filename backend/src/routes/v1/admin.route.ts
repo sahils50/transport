@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware";
 import { loginAdminSchema } from "../../schemas/auth.schema";
-import { authRateLimiter } from "../../config/rateLimiter";
+import { authRateLimiter, apiRateLimiter } from "../../config/rateLimiter";
 import { authenticate } from "../../middlewares/auth.middleware";
 import {
   createAdminSchema,
@@ -19,11 +19,29 @@ import {
   handleChangePassword,
   getDashboardFeed,
   handleGetDriverDetails,
+  handleGetExpenseFeed,
+  handleReviewExpense,
+  handleGetTripFeed,
+  handleCreateTrip,
+  handleGetVehicles,
+  handlePostVehicle,
+  handleUpdateVehicle,
 } from "../../controllers/admin.controller";
+import { dashboardFilterSchema } from "../../schemas/dashboard.schema";
 import {
-  DashboardFilterInput,
-  dashboardFilterSchema,
-} from "../../schemas/dashboard.schema";
+  getExpensesQuerySchema,
+  reviewExpenseSchema,
+} from "../../schemas/trip_expense.schema";
+import {
+  createTripSchema,
+  getTripsQuerySchema,
+} from "../../schemas/trip.schema";
+import {
+  createVehicleSchema,
+  getVehiclesQuerySchema,
+  updateVehicleSchema,
+} from "../../schemas/vehicle.schema";
+
 const router = Router();
 /**
  * @swagger
@@ -86,7 +104,7 @@ router.post(
  *       401:
  *         description: Unauthorized
  */
-router.get("/drivers", authRateLimiter, authenticate, getDrivers);
+router.get("/drivers", apiRateLimiter, authenticate, getDrivers);
 /**
  * @swagger
  * /api/v1/admin/register:
@@ -206,7 +224,7 @@ router.post(
   createAdminController,
 );
 
-router.get("/profile", authRateLimiter, authenticate, getAdminProfile);
+router.get("/profile", apiRateLimiter, authenticate, getAdminProfile);
 /**
  * @swagger
  * /api/v1/admin/createDriver:
@@ -303,7 +321,7 @@ router.get("/profile", authRateLimiter, authenticate, getAdminProfile);
  */
 router.post(
   "/createDriver",
-  authRateLimiter,
+  apiRateLimiter,
   validate(createDriverSchema),
   authenticate,
   createDriverController,
@@ -325,17 +343,63 @@ router.patch(
 
 router.get(
   "/dashboard",
-  authRateLimiter,
+  apiRateLimiter,
   authenticate,
   validate(dashboardFilterSchema),
   getDashboardFeed,
 );
 
+router.get("/driver/:id", apiRateLimiter, authenticate, handleGetDriverDetails);
+
 router.get(
-  "/driver/:id",
-  authRateLimiter,
+  "/expenses",
+  apiRateLimiter,
   authenticate,
-  handleGetDriverDetails,
+  validate(getExpensesQuerySchema),
+  handleGetExpenseFeed,
+);
+
+router.post(
+  "/expenses/review",
+  apiRateLimiter,
+  authenticate,
+  validate(reviewExpenseSchema),
+  handleReviewExpense,
+);
+router.get(
+  "/trips",
+  apiRateLimiter,
+  authenticate,
+  validate(getTripsQuerySchema),
+  handleGetTripFeed,
+);
+
+router.post(
+  "/trips",
+  apiRateLimiter,
+  authenticate,
+  validate(createTripSchema),
+  handleCreateTrip,
+);
+router.get(
+  "/vehicles",
+  authenticate,
+  validate(getVehiclesQuerySchema),
+  handleGetVehicles,
+);
+router.post(
+  "/vehicles",
+  apiRateLimiter,
+  authenticate,
+  validate(createVehicleSchema),
+  handlePostVehicle,
+);
+router.put(
+  "/vehicles/:id",
+  apiRateLimiter,
+  authenticate,
+  validate(updateVehicleSchema),
+  handleUpdateVehicle,
 );
 // Protected routes (add authenticate middleware)
 // router.get("/profile",authRateLimiter, authenticate, getAdminProfileController);
