@@ -10,7 +10,9 @@ if (!JWT_SECRET) {
 
 export interface JwtPayload {
   admin_id: number;
-  email_address: string;
+  email_address?: string;
+  driver_id?: number;
+  role: "admin" | "driver";
 }
 
 export const signToken = (payload: JwtPayload): string =>
