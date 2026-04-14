@@ -15,3 +15,12 @@ export const createDriverSchema = z.object({
   }),
 });
 export type CreateDriverInput = z.infer<typeof createDriverSchema>["body"];
+
+export const driverLoginSchema = z.object({
+  body: z.object({
+    driver_phone_no1: z.string().min(10),
+    business_code: z.string().min(6), // From the Admin's business_code
+  }),
+});
+
+export type DriverLoginInput = z.infer<typeof driverLoginSchema>["body"];
