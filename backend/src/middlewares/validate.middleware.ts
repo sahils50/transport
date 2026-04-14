@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as z from "zod";
 
 export const validate =
-  <T extends z.ZodTypeAny>(schema: T) =>
+  <T extends z.ZodType>(schema: T) =>
   (req: Request, res: Response, next: NextFunction) => {
     const result = schema.safeParse({
       body: req.body,
