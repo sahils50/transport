@@ -42,3 +42,18 @@ export const reviewExpenseSchema = z.object({
 });
 
 export type ReviewExpenseInput = z.infer<typeof reviewExpenseSchema>["body"];
+export const postExpenseSchema = z.object({
+  body: z.object({
+    trip_id: z.number().int(),
+    expense_type: z.enum(["fuel", "toll", "other"]),
+    expense_amount: z.number().positive(),
+    payment_mode: z.enum(["cash", "online", "card", "upi"]),
+    bill_url: z.url().nullable().optional(),
+    notes: z.string().nullable().optional(),
+    // admin_id and driver_id made optional to pass validation
+    admin_id: z.number().int().optional(),
+    driver_id: z.number().int().optional(),
+  }),
+});
+
+export type PostExpenseInput = z.infer<typeof postExpenseSchema>["body"];
