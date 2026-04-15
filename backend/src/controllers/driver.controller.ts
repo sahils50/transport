@@ -9,6 +9,10 @@ import {
   postNewExpense,
 } from "../services/driver/expense.service";
 import { PostExpenseInput } from "../schemas/trip_expense.schema";
+import {
+  getLatestTrip,
+  updateTripProgress,
+} from "../services/driver/trip.service";
 
 export const handleDriverLogin = async (
   req: Request,
@@ -121,6 +125,45 @@ export const handlePostExpense = async (
       success: true,
       message: "Expense logged successfully and sent for approval",
       data: expense,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleGetHomeData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const driver_id = req.driver!.driver_id;
+    const data = await getLatestTrip(driver_id);
+
+    return res.status(200).json({
+      success: true,
+      data: data || { message: "No active or upcoming trips assigned." },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleUpdateTripStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const driver_id = req.driver!.driver_id;
+    const { trip_id, action } = req.body; // action: "start" | "end"
+
+    const updatedTrip = await updateTripProgress(driver_id, trip_id, action);
+
+    return res.status(200).json({
+      success: true,
+      message: `Trip ${action === "start" ? "started" : "completed"} successfully`,
+      data: updatedTrip,
     });
   } catch (err) {
     next(err);

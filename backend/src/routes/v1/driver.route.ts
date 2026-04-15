@@ -4,8 +4,10 @@ import {
   handleGetAdminContact,
   handleGetExpenseDetail,
   handleGetExpenseFeed,
+  handleGetHomeData,
   handleGetProfile,
   handlePostExpense,
+  handleUpdateTripStatus,
 } from "../../controllers/driver.controller";
 import { Router } from "express";
 import { validate } from "../../middlewares/validate.middleware";
@@ -33,11 +35,18 @@ router.get(
   authenticateDriver,
   handleGetExpenseDetail,
 );
-
 router.post(
   "/expenses",
+  apiRateLimiter,
   authenticateDriver,
   validate(postExpenseSchema),
   handlePostExpense,
+);
+router.get("/home", apiRateLimiter, authenticateDriver, handleGetHomeData);
+router.patch(
+  "/trip-status",
+  apiRateLimiter,
+  authenticateDriver,
+  handleUpdateTripStatus,
 );
 export default router;
