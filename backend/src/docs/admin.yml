@@ -1,0 +1,1541 @@
+paths:
+  api/v1/admin/login:
+    post:
+      summary: Admin login
+      description: Authenticates an admin using email and password and returns a JWT token.
+      tags:
+        - Admin Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email_address
+                - password
+              properties:
+                email_address:
+                  type: string
+                  format: email
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Login Successful
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: jwt.token.here
+                      admin:
+                        type: object
+                        properties:
+                          admin_id:
+                            type: string
+                            example: "123"
+                          email_address:
+                            type: string
+                            example: admin@example.com
+                          business_name:
+                            type: string
+                            example: My Business
+        401:
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  message: Invalid email or password
+        403:
+          description: Account inactive or password not configured
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: false
+                  message: Account is inactive
+        429:
+          description: Too many requests (rate limiter)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/drivers:
+    get:
+      summary: Get all active drivers
+      description: Fetch all active drivers for the authenticated admin.
+      tags:
+        - Admin Drivers
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Drivers fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Drivers fetched successfully
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        driver_id:
+                          type: integer
+                          example: 1
+                        driver_name:
+                          type: string
+                          example: John Doe
+                        driver_phone_no1:
+                          type: string
+                          example: "9876543210"
+                        driver_phone_no2:
+                          type: string
+                          nullable: true
+                          example: "9123456780"
+                        driver_license_no:
+                          type: string
+                          example: DL123456789
+                        driver_license_type:
+                          type: string
+                          example: LMV
+                        driver_license_expiry_date:
+                          type: string
+                          format: date-time
+                          example: 2028-12-31T00:00:00.000Z
+                        driver_profile_picture_url:
+                          type: string
+                          nullable: true
+                          example: https://example.com/profile.jpg
+                        is_active:
+                          type: boolean
+                          example: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: 2024-01-01T10:00:00.000Z
+        401:
+          description: Unauthorized (missing or invalid token)
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        404:
+          description: Admin not found
+          content:
+            application/json:
+              example:
+                success: false
+                message: Admin not found
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/register:
+    post:
+      summary: Register a new admin
+      description: Creates a new admin account with email, password, business name, and phone number.
+      tags:
+        - Admin Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email_address
+                - password
+                - business_name
+                - phone_no
+              properties:
+                email_address:
+                  type: string
+                  format: email
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: StrongPassword123
+                business_name:
+                  type: string
+                  example: My Transport Company
+                phone_no:
+                  type: string
+                  example: "9876543210"
+      responses:
+        201:
+          description: Admin created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Admin created successfully
+                  data:
+                    type: object
+                    properties:
+                      admin_id:
+                        type: integer
+                        example: 1
+                      email_address:
+                        type: string
+                        example: admin@example.com
+                      business_name:
+                        type: string
+                        example: My Transport Company
+                      business_code:
+                        type: string
+                        example: ABC123
+                      phone_no:
+                        type: string
+                        example: "9876543210"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: 2024-01-01T10:00:00.000Z
+        409:
+          description: Email or phone already registered
+          content:
+            application/json:
+              examples:
+                emailExists:
+                  value:
+                    success: false
+                    message: Email already registered
+                phoneExists:
+                  value:
+                    success: false
+                    message: Phone number already registered
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/createDriver:
+    post:
+      summary: Create a new driver
+      description: Creates a new driver under the authenticated admin.
+      tags:
+        - Admin Drivers
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - admin_id
+                - driver_name
+                - driver_phone_no1
+                - driver_license_no
+                - driver_license_type
+                - driver_license_expiry_date
+              properties:
+                admin_id:
+                  type: integer
+                  example: 1
+                driver_name:
+                  type: string
+                  example: John Doe
+                driver_phone_no1:
+                  type: string
+                  example: "9876543210"
+                driver_phone_no2:
+                  type: string
+                  nullable: true
+                  example: "9123456780"
+                driver_license_no:
+                  type: string
+                  example: DL123456789
+                driver_license_type:
+                  type: string
+                  example: LMV
+                driver_license_expiry_date:
+                  type: string
+                  format: date-time
+                  example: 2028-12-31T00:00:00.000Z
+      responses:
+        201:
+          description: Driver created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Driver create successfully
+                  data:
+                    type: object
+                    properties:
+                      driver_id:
+                        type: integer
+                        example: 1
+                      admin_id:
+                        type: integer
+                        example: 1
+                      driver_name:
+                        type: string
+                        example: John Doe
+                      driver_phone_no1:
+                        type: string
+                        example: "9876543210"
+                      driver_phone_no2:
+                        type: string
+                        nullable: true
+                        example: "9123456780"
+                      driver_license_no:
+                        type: string
+                        example: DL123456789
+                      driver_license_type:
+                        type: string
+                        example: LMV
+                      driver_license_expiry_date:
+                        type: string
+                        format: date-time
+                        example: 2028-12-31T00:00:00.000Z
+        401:
+          description: Unauthorized (missing or invalid token)
+        409:
+          description: Driver already exists (phone or license conflict)
+          content:
+            application/json:
+              examples:
+                phoneConflict:
+                  value:
+                    success: false
+                    message: Phone number is already registered
+                licenseConflict:
+                  value:
+                    success: false
+                    message: Licence number is already registered
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/profile:
+    get:
+      summary: Get admin profile
+      description: Fetch the profile details of the authenticated admin.
+      tags:
+        - Admin Profile
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Admin profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Admin profile fetched successfully
+                  data:
+                    type: object
+                    properties:
+                      admin_id:
+                        type: integer
+                        example: 1
+                      email_address:
+                        type: string
+                        example: admin@example.com
+                      admin_name:
+                        type: string
+                        nullable: true
+                        example: John Doe
+                      business_name:
+                        type: string
+                        example: My Transport Company
+                      business_code:
+                        type: string
+                        example: ABC123
+                      phone_no:
+                        type: string
+                        example: "9876543210"
+                      profile_picture_url:
+                        type: string
+                        nullable: true
+                        example: https://example.com/profile.jpg
+                      is_active:
+                        type: boolean
+                        example: true
+        401:
+          description: Unauthorized (missing or invalid token)
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        404:
+          description: Admin not found
+          content:
+            application/json:
+              example:
+                success: false
+                message: Admin not found
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+    patch:
+      summary: Update admin profile
+      description: Updates profile details of the authenticated admin.
+      tags:
+        - Admin Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                admin_name:
+                  type: string
+                  example: John Doe
+                business_name:
+                  type: string
+                  example: My Transport Company
+                phone_no:
+                  type: string
+                  example: "9876543210"
+                profile_picture_url:
+                  type: string
+                  example: https://example.com/profile.jpg
+      responses:
+        200:
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Profile updated successfully
+                  data:
+                    type: object
+                    properties:
+                      admin_id:
+                        type: integer
+                        example: 1
+                      admin_name:
+                        type: string
+                        nullable: true
+                        example: John Doe
+                      email_address:
+                        type: string
+                        example: admin@example.com
+                      business_name:
+                        type: string
+                        example: My Transport Company
+                      business_code:
+                        type: string
+                        example: ABC123
+                      phone_no:
+                        type: string
+                        example: "9876543210"
+                      profile_picture_url:
+                        type: string
+                        nullable: true
+                        example: https://example.com/profile.jpg
+        401:
+          description: Unauthorized (missing or invalid token)
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        404:
+          description: Admin not found
+          content:
+            application/json:
+              example:
+                success: false
+                message: Admin not found
+        409:
+          description: Phone number already in use
+          content:
+            application/json:
+              example:
+                success: false
+                message: Phone number already in use by another account
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/change-password:
+    patch:
+      summary: Change admin password
+      description: Allows an authenticated admin to change their password by providing the current password.
+      tags:
+        - Admin Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - old_password
+                - new_password
+              properties:
+                old_password:
+                  type: string
+                  example: OldPassword123
+                new_password:
+                  type: string
+                  example: NewStrongPassword456
+      responses:
+        200:
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Password has been changed successfully
+        400:
+          description: Invalid request (e.g., new password same as old)
+          content:
+            application/json:
+              example:
+                success: false
+                message: New password cannot be the same as the old password
+        401:
+          description: Unauthorized or incorrect password
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value:
+                    success: false
+                    message: Unauthorized
+                incorrectPassword:
+                  value:
+                    success: false
+                    message: Incorrect original password
+        404:
+          description: Admin not found or password not set
+          content:
+            application/json:
+              example:
+                success: false
+                message: Admin not found or password not set
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/dashboard:
+    get:
+      summary: Get admin dashboard data
+      description: Returns overview stats, expense analysis, and monthly summary for the authenticated admin.
+      tags:
+        - Admin Dashboard
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: expense_period
+          required: false
+          schema:
+            type: string
+            enum: [today, weekly, monthly]
+          description: Time period for expense analysis
+          example: monthly
+      responses:
+        200:
+          description: Dashboard data fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      overview:
+                        type: object
+                        properties:
+                          active_trips:
+                            type: integer
+                            example: 5
+                          delayed_trips:
+                            type: integer
+                            example: 2
+                          scheduled_trips:
+                            type: integer
+                            example: 8
+                          idle_vehicle:
+                            type: integer
+                            example: 3
+                      expense_analysis:
+                        type: object
+                        properties:
+                          period:
+                            type: string
+                            example: monthly
+                          fuel:
+                            type: number
+                            example: 15000
+                          toll:
+                            type: number
+                            example: 5000
+                          other:
+                            type: number
+                            example: 2000
+                      monthly_summary:
+                        type: object
+                        properties:
+                          total_trips:
+                            type: integer
+                            example: 20
+                          expected_expense:
+                            type: number
+                            example: 30000
+                          actual_expense:
+                            type: number
+                            example: 22000
+        401:
+          description: Unauthorized (missing or invalid token)
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        400:
+          description: Invalid query parameter
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/driver/{id}:
+    get:
+      summary: Get driver details by ID
+      description: Fetch detailed information of a specific driver belonging to the authenticated admin.
+      tags:
+        - Admin Drivers
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Driver ID
+          example: 1
+      responses:
+        200:
+          description: Driver details fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      driver_id:
+                        type: integer
+                        example: 1
+                      driver_name:
+                        type: string
+                        example: John Doe
+                      driver_phone_no1:
+                        type: string
+                        example: "9876543210"
+                      driver_phone_no2:
+                        type: string
+                        nullable: true
+                        example: "9123456780"
+                      driver_license_no:
+                        type: string
+                        example: DL123456789
+                      driver_license_type:
+                        type: string
+                        example: LMV
+                      driver_license_expiry_date:
+                        type: string
+                        format: date-time
+                        example: 2028-12-31T00:00:00.000Z
+                      driver_profile_picture_url:
+                        type: string
+                        nullable: true
+                        example: https://example.com/profile.jpg
+                      is_active:
+                        type: boolean
+                        example: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: 2024-01-01T10:00:00.000Z
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: 2024-01-02T12:00:00.000Z
+                      trip_count:
+                        type: integer
+                        example: 15
+        401:
+          description: Unauthorized (missing or invalid token)
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        404:
+          description: Driver not found or access denied
+          content:
+            application/json:
+              example:
+                success: false
+                message: Driver profile not found or access denied
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/expenses:
+    get:
+      summary: Get all expenses
+      description: Fetch paginated list of expenses for the authenticated admin with optional status filter.
+      tags:
+        - Admin Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 10
+          example: 10
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            enum: [paid, pending, failed]
+          description: Filter expenses by status
+          example: paid
+      responses:
+        200:
+          description: Expenses fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        expense_id:
+                          type: integer
+                          example: 1
+                        expense_type:
+                          type: string
+                          example: fuel
+                        expense_amount:
+                          type: number
+                          example: 1500
+                        payment_mode:
+                          type: string
+                          example: cash
+                        status:
+                          type: string
+                          example: paid
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: 2024-01-01T10:00:00.000Z
+                        bill_url:
+                          type: string
+                          nullable: true
+                          example: https://example.com/bill.jpg
+                        driver:
+                          type: object
+                          properties:
+                            driver_name:
+                              type: string
+                              example: John Doe
+                            driver_license_no:
+                              type: string
+                              example: DL123456789
+                        trip:
+                          type: object
+                          properties:
+                            trip_name:
+                              type: string
+                              example: Mumbai to Pune
+                            trip_code:
+                              type: string
+                              example: TRIP123
+                  pagination:
+                    type: object
+                    properties:
+                      total_records:
+                        type: integer
+                        example: 100
+                      current_page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 10
+                      has_more:
+                        type: boolean
+                        example: true
+        400:
+          description: Invalid query parameters
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/expenses/review:
+    post:
+      summary: Review an expense
+      description: Approve or reject a pending expense for the authenticated admin.
+      tags:
+        - Admin Expenses
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - expense_id
+                - status
+              properties:
+                expense_id:
+                  type: integer
+                  example: 1
+                status:
+                  type: string
+                  enum: [paid, rejected]
+                  example: paid
+                notes:
+                  type: string
+                  nullable: true
+                  example: Approved after verification
+      responses:
+        200:
+          description: Expense reviewed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Expense successfully marked as paid
+                  data:
+                    type: object
+                    properties:
+                      expense_id:
+                        type: integer
+                        example: 1
+                      expense_type:
+                        type: string
+                        example: fuel
+                      expense_amount:
+                        type: number
+                        example: 1500
+                      status:
+                        type: string
+                        example: paid
+                      notes:
+                        type: string
+                        nullable: true
+                        example: Approved after verification
+                      reviewed_by:
+                        type: integer
+                        example: 1
+                      reviewed_at:
+                        type: string
+                        format: date-time
+                        example: 2024-01-01T10:00:00.000Z
+                      driver:
+                        type: object
+                        properties:
+                          driver_name:
+                            type: string
+                            example: John Doe
+                      trip:
+                        type: object
+                        properties:
+                          trip_name:
+                            type: string
+                            example: Mumbai to Pune
+        400:
+          description: Invalid request (e.g., already reviewed)
+          content:
+            application/json:
+              example:
+                success: false
+                message: This expense has already been marked as paid
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        404:
+          description: Expense not found or access denied
+          content:
+            application/json:
+              example:
+                success: false
+                message: Expense record not found or access denied
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/trips:
+    get:
+      summary: Get all trips
+      description: Fetch paginated list of trips for the authenticated admin with optional status filter.
+      tags:
+        - Admin Trips
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 10
+          example: 10
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            enum: [scheduled, in_transit, delayed, completed, cancelled]
+          description: Filter trips by status
+          example: in_transit
+      responses:
+        200:
+          description: Trips fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        trip_id:
+                          type: integer
+                          example: 1
+                        trip_code:
+                          type: string
+                          example: TRIP123
+                        trip_name:
+                          type: string
+                          example: Mumbai to Pune
+                        origin_name:
+                          type: string
+                          example: Mumbai
+                        destination_name:
+                          type: string
+                          example: Pune
+                        trip_status:
+                          type: string
+                          example: in_transit
+                        fuel_limit:
+                          type: number
+                          example: 5000
+                        toll_limit:
+                          type: number
+                          example: 1500
+                        other_cost_limit:
+                          type: number
+                          example: 1000
+                        total_allocated_budget:
+                          type: number
+                          example: 7500
+                        scheduled_start_at:
+                          type: string
+                          format: date-time
+                          example: 2024-01-01T10:00:00.000Z
+                        vehicle:
+                          type: object
+                          properties:
+                            vehicle_number:
+                              type: string
+                              example: MH12AB1234
+                        driver:
+                          type: object
+                          properties:
+                            driver_name:
+                              type: string
+                              example: John Doe
+                  pagination:
+                    type: object
+                    properties:
+                      total_records:
+                        type: integer
+                        example: 50
+                      current_page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 5
+        400:
+          description: Invalid query parameters
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+    post:
+      summary: Create a new trip
+      description: Creates a new trip for the authenticated admin with vehicle, driver, route, and budget details.
+      tags:
+        - Admin Trips
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - trip_code
+                - trip_name
+                - vehicle_id
+                - driver_id
+                - origin_name
+                - destination_name
+                - origin_coordinates
+                - destination_coordinates
+                - scheduled_start_at
+                - scheduled_end_at
+                - trip_type
+              properties:
+                trip_code:
+                  type: string
+                  example: TRIP123
+                trip_name:
+                  type: string
+                  example: Mumbai to Pune
+                vehicle_id:
+                  type: integer
+                  example: 1
+                driver_id:
+                  type: integer
+                  example: 1
+                origin_name:
+                  type: string
+                  example: Mumbai
+                destination_name:
+                  type: string
+                  example: Pune
+                origin_coordinates:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      example: 72.8777
+                    y:
+                      type: number
+                      example: 19.0760
+                destination_coordinates:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      example: 73.8567
+                    y:
+                      type: number
+                      example: 18.5204
+                scheduled_start_at:
+                  type: string
+                  format: date-time
+                  example: 2024-01-01T10:00:00.000Z
+                scheduled_end_at:
+                  type: string
+                  format: date-time
+                  example: 2024-01-01T18:00:00.000Z
+                trip_type:
+                  type: string
+                  example: one_way
+                trip_status:
+                  type: string
+                  enum: [scheduled, in_transit, delayed, completed, cancelled]
+                  example: scheduled
+                fuel_limit:
+                  type: number
+                  example: 5000
+                toll_limit:
+                  type: number
+                  example: 1500
+                other_cost_limit:
+                  type: number
+                  example: 1000
+                notes:
+                  type: string
+                  nullable: true
+                  example: Handle with care
+      responses:
+        201:
+          description: Trip created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Trip created successfully
+                      trip_code:
+                        type: string
+                        example: TRIP123
+        400:
+          description: Invalid input or duplicate trip code
+          content:
+            application/json:
+              examples:
+                duplicateCode:
+                  value:
+                    success: false
+                    message: Trip code already exist
+                invalidSelection:
+                  value:
+                    success: false
+                    message: Invalid Vehicle or Driver Selection
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/vehicles:
+    get:
+      summary: Get all vehicles
+      description: Fetch paginated list of vehicles for the authenticated admin with optional filters.
+      tags:
+        - Admin Vehicles
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 10
+          example: 10
+        - in: query
+          name: type
+          required: false
+          schema:
+            type: string
+          description: Filter by vehicle type
+          example: truck
+        - in: query
+          name: is_active
+          required: false
+          schema:
+            type: boolean
+          description: Filter by active status
+          example: true
+      responses:
+        200:
+          description: Vehicles fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        vehicle_id:
+                          type: integer
+                          example: 1
+                        vehicle_number:
+                          type: string
+                          example: MH12AB1234
+                        vehicle_type:
+                          type: string
+                          example: truck
+                        is_active:
+                          type: boolean
+                          example: true
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: 2024-01-01T10:00:00.000Z
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: 2024-01-02T10:00:00.000Z
+                        _count:
+                          type: object
+                          properties:
+                            trip:
+                              type: integer
+                              example: 12
+                  pagination:
+                    type: object
+                    properties:
+                      total_records:
+                        type: integer
+                        example: 25
+                      current_page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 3
+        400:
+          description: Invalid query parameters
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+    post:
+      summary: Create a new vehicle
+      description: Adds a new vehicle to the authenticated admin's fleet.
+      tags:
+        - Admin Vehicles
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - vehicle_number
+                - vehicle_type
+                - fuel_type
+              properties:
+                vehicle_number:
+                  type: string
+                  example: MH12AB1234
+                vehicle_type:
+                  type: string
+                  example: truck
+                fuel_type:
+                  type: string
+                  example: diesel
+                mileage:
+                  type: number
+                  nullable: true
+                  example: 15
+                fuel_tank_capacity:
+                  type: number
+                  nullable: true
+                  example: 60
+                is_active:
+                  type: boolean
+                  example: true
+      responses:
+        201:
+          description: Vehicle created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Vehicle added to fleet successfully
+                  data:
+                    type: object
+                    properties:
+                      vehicle_id:
+                        type: integer
+                        example: 1
+                      vehicle_number:
+                        type: string
+                        example: MH12AB1234
+                      vehicle_type:
+                        type: string
+                        example: truck
+                      fuel_type:
+                        type: string
+                        example: diesel
+                      mileage:
+                        type: number
+                        nullable: true
+                        example: 15
+                      fuel_tank_capacity:
+                        type: number
+                        nullable: true
+                        example: 60
+                      is_active:
+                        type: boolean
+                        example: true
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: 2024-01-01T10:00:00.000Z
+        400:
+          description: Vehicle already exists or invalid input
+          content:
+            application/json:
+              example:
+                success: false
+                message: A vehicle with this registration number already exists
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                success: false
+                message: Unauthorized
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/admin/vehicles/{id}:
+    put:
+      summary: Update a vehicle
+      description: Updates vehicle details for the authenticated admin.
+      tags:
+        - Admin Vehicles
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Vehicle ID
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vehicle_number:
+                  type: string
+                  example: MH12AB1234
+                vehicle_type:
+                  type: string
+                  example: truck
+                fuel_type:
+                  type: string
+                  example: diesel
+                mileage:
+                  type: number
+                  example: 15
+                fuel_tank_capacity:
+                  type: number
+                  example: 60
+                is_active:
+                  type: boolean
+                  example: true
+      responses:
+        200:
+          description: Vehicle updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Vehicle updated successfully
+                  data:
+                    type: object
+                    properties:
+                      vehicle_id:
+                        type: integer
+                        example: 1
+                      vehicle_number:
+                        type: string
+                        example: MH12AB1234
+                      vehicle_type:
+                        type: string
+                        example: truck
+                      fuel_type:
+                        type: string
+                        example: diesel
+                      mileage:
+                        type: number
+                        example: 15
+                      fuel_tank_capacity:
+                        type: number
+                        example: 60
+                      is_active:
+                        type: boolean
+                        example: true
+        400:
+          description: Invalid input or duplicate vehicle number
+          content:
+            application/json:
+              example:
+                success: false
+                message: Vehicle number already exists in system
+        401:
+          description: Unauthorized
+        404:
+          description: Vehicle not found or access denied
+          content:
+            application/json:
+              example:
+                success: false
+                message: Vehicle not found or access denied
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
