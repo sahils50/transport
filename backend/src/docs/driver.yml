@@ -1,0 +1,603 @@
+paths:
+  /api/v1/driver/login:
+    post:
+      summary: Driver login
+      description: Authenticate a driver using phone number and business code.
+      tags:
+        - Driver Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - driver_phone_no1
+                - business_code
+              properties:
+                driver_phone_no1:
+                  type: string
+                  example: "9876543210"
+                business_code:
+                  type: string
+                  example: "BUS123"
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        example: "jwt.token.here"
+                      driver:
+                        type: object
+                        properties:
+                          driver_id:
+                            type: integer
+                            example: 1
+                          driver_name:
+                            type: string
+                            example: "John Doe"
+        401:
+          description: Invalid credentials
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Invalid credentials"
+        403:
+          description: Account inactive
+          content:
+            application/json:
+              example:
+                success: false
+                message: "Account inactive"
+        429:
+          description: Too many requests (rate limited)
+        500:
+          description: Internal server error
+
+  /api/v1/driver/profile:
+    get:
+      summary: Get driver profile
+      description: Retrieve the authenticated driver's profile details.
+      tags:
+        - Driver
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Driver profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      driver_id:
+                        type: integer
+                        example: 1
+                      admin_id:
+                        type: integer
+                        example: 10
+                      driver_name:
+                        type: string
+                        example: "John Doe"
+                      driver_phone_no1:
+                        type: string
+                        example: "9876543210"
+                      driver_phone_no2:
+                        type: string
+                        nullable: true
+                        example: "9123456780"
+                      driver_license_no:
+                        type: string
+                        example: "DL12345678"
+                      driver_license_expiry_date:
+                        type: string
+                        format: date-time
+                        example: "2030-12-31"
+                      driver_profile_picture_url:
+                        type: string
+                        nullable: true
+                        example: "https://example.com/profile.jpg"
+                      is_active:
+                        type: boolean
+                        example: true
+                      admin:
+                        type: object
+                        properties:
+                          business_name:
+                            type: string
+                            example: "ABC Logistics"
+                          business_code:
+                            type: string
+                            example: "BUS123"
+        401:
+          description: Unauthorized (missing or invalid token)
+        404:
+          description: Driver profile not found
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+
+  /api/v1/driver/owner:
+    get:
+      summary: Get admin (owner) contact details
+      description: Retrieve the contact details of the admin (owner) associated with the authenticated driver.
+      tags:
+        - Driver
+      security:
+        - bearerAuth: []
+      response:
+        200:
+          description: Admin contact fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Admin contact fetched successfully"
+                  data:
+                    type: object
+                    nullable: true
+                    properties:
+                      admin_id:
+                        type: integer
+                        example: 10
+                      email_address:
+                        type: string
+                        format: email
+                        example: "owner@example.com"
+                      phone_no:
+                        type: string
+                        example: "9876543210"
+                      is_active:
+                        type: boolean
+                        example: true
+        401:
+          description: Unauthorized (missing or invalid token)
+        404:
+          description: Admin not found
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+
+  /api/v1/driver/expenses:
+    get:
+      summary: Get driver expense feed
+      description: Retrieve a paginated list of expenses for the authenticated driver, optionally filtered by status.
+      tags:
+        - Driver Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Number of records per page
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            example: "approved"
+          description: Filter expenses by status
+      responses:
+        200:
+          description: Expense feed fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        expense_id:
+                          type: integer
+                          example: 101
+                        driver_id:
+                          type: integer
+                          example: 1
+                        amount:
+                          type: number
+                          format: float
+                          example: 500.75
+                        expense_status:
+                          type: string
+                          example: "approved"
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2026-04-15T10:00:00Z"
+                        trip:
+                          type: object
+                          properties:
+                            trip_code:
+                              type: string
+                              example: "TRIP123"
+                            trip_name:
+                              type: string
+                              example: "Mumbai Delivery"
+                  pagination:
+                    type: object
+                    properties:
+                      total_records:
+                        type: integer
+                        example: 100
+                      current_page:
+                        type: integer
+                        example: 1
+                      total_pages:
+                        type: integer
+                        example: 10
+        401:
+          description: Unauthorized (missing or invalid token)
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+    post:
+      summary: Create a new expense
+      description: Log a new expense for a trip. The expense will be created with a pending status and sent for admin approval.
+      tags:
+        - Driver Expenses
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - trip_id
+                - expense_type
+                - expense_amount
+                - payment_mode
+              properties:
+                trip_id:
+                  type: integer
+                  example: 101
+                expense_type:
+                  type: string
+                  example: "fuel"
+                expense_amount:
+                  type: number
+                  format: float
+                  example: 500.75
+                payment_mode:
+                  type: string
+                  example: "cash"
+                bill_url:
+                  type: string
+                  nullable: true
+                  example: "https://example.com/bill.jpg"
+                notes:
+                  type: string
+                  nullable: true
+                  example: "Fuel filled at highway station"
+      responses:
+        201:
+          description: Expense created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Expense logged successfully and sent for approval"
+                  data:
+                    type: object
+                    properties:
+                      expense_id:
+                        type: integer
+                        example: 101
+                      trip_id:
+                        type: integer
+                        example: 55
+                      driver_id:
+                        type: integer
+                        example: 1
+                      admin_id:
+                        type: integer
+                        example: 10
+                      expense_type:
+                        type: string
+                        example: "fuel"
+                      expense_amount:
+                        type: number
+                        format: float
+                        example: 500.75
+                      payment_mode:
+                        type: string
+                        example: "cash"
+                      bill_url:
+                        type: string
+                        nullable: true
+                        example: "https://example.com/bill.jpg"
+                      notes:
+                        type: string
+                        nullable: true
+                        example: "Fuel filled at highway station"
+                      status:
+                        type: string
+                        example: "pending"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2026-04-15T10:00:00Z"
+        401:
+          description: Unauthorized (missing or invalid token)
+        403:
+          description: Invalid trip selected or unauthorized access
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+
+  /api/v1/driver/expenses/{id}:
+    get:
+      summary: Get expense detail
+      description: Retrieve details of a specific expense belonging to the authenticated driver.
+      tags:
+        - Driver Expenses
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: Expense ID
+      responses:
+        200:
+          description: Expense fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      expense_id:
+                        type: integer
+                        example: 101
+                      driver_id:
+                        type: integer
+                        example: 1
+                      amount:
+                        type: number
+                        format: float
+                        example: 500.75
+                      expense_status:
+                        type: string
+                        example: "approved"
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: "2026-04-15T10:00:00Z"
+                      trip:
+                        type: object
+                        description: Associated trip details
+                        properties:
+                          trip_id:
+                            type: integer
+                            example: 55
+                          trip_code:
+                            type: string
+                            example: "TRIP123"
+                          trip_name:
+                            type: string
+                            example: "Mumbai Delivery"
+        401:
+          description: Unauthorized (missing or invalid token)
+        404:
+          description: Expense not found or unauthorized
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+
+  /api/v1/driver/home:
+    get:
+      summary: Get driver home data
+      description: Retrieve the latest active or upcoming trip assigned to the authenticated driver along with budget and expense summary.
+      tags:
+        - Driver
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Home data fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    oneOf:
+                      - type: object
+                        properties:
+                          trip_id:
+                            type: integer
+                            example: 101
+                          trip_code:
+                            type: string
+                            example: "TRIP123"
+                          trip_status:
+                            type: string
+                            example: "in_transit"
+                          origin:
+                            type: string
+                            example: "Mumbai"
+                          destination:
+                            type: string
+                            example: "Pune"
+                          scheduled_start:
+                            type: string
+                            format: date-time
+                            example: "2026-04-16T08:00:00Z"
+                          actual_start:
+                            type: string
+                            format: date-time
+                            nullable: true
+                            example: "2026-04-16T08:15:00Z"
+                          actual_end:
+                            type: string
+                            format: date-time
+                            nullable: true
+                            example: null
+                          vehicle:
+                            type: object
+                            properties:
+                              vehicle_number:
+                                type: string
+                                example: "MH12AB1234"
+                              vehicle_type:
+                                type: string
+                                example: "Truck"
+                          budget:
+                            type: object
+                            properties:
+                              allowed:
+                                type: number
+                                example: 5000
+                              spent:
+                                type: number
+                                example: 1500
+                              remaining:
+                                type: number
+                                example: 3500
+                      - type: object
+                        properties:
+                          message:
+                            type: string
+                            example: "No active or upcoming trips assigned."
+        401:
+          description: Unauthorized (missing or invalid token)
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
+
+  /api/v1/driver/trip-status:
+    patch:
+      summary: Update trip status
+      description: Start or complete a trip assigned to the authenticated driver.
+      tags:
+        - Driver Trips
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - trip_id
+                - action
+              properties:
+                trip_id:
+                  type: integer
+                  example: 101
+                action:
+                  type: string
+                  enum: [start, end]
+                  example: start
+      responses:
+        200:
+          description: Trip status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Trip started successfully"
+                  data:
+                    type: object
+                    properties:
+                      trip_id:
+                        type: integer
+                        example: 101
+                      driver_id:
+                        type: integer
+                        example: 1
+                      trip_status:
+                        type: string
+                        example: "in_transit"
+                      actual_start_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2026-04-15T10:00:00Z"
+                      actual_end_at:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+        400:
+          description: Invalid action or request data
+        401:
+          description: Unauthorized (missing or invalid token)
+        404:
+          description: Trip not found
+        429:
+          description: Too many requests
+        500:
+          description: Internal server error
