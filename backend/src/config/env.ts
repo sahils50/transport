@@ -13,14 +13,16 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("7d"),
   SERVER_PORT: z.string(),
+  LOG_LEVEL: z.string(),
 });
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error("❌ Invalid environment variables:");
-  console.error(parsed.error.flatten().fieldErrors);
-  process.exit(1); // kill the process — don't start with bad config
+  const flattened = z.flattenError(parsed.error);
+  console.error(flattened.fieldErrors);
+  process.exit(1);
 }
 
 export const env = parsed.data;

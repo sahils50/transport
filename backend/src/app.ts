@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express";
-import morgan from "morgan";
 import v1Routes from "./routes/v1/index";
 import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "./middlewares/error.middleware";
 import { apiRateLimiter } from "./config/rateLimiter";
+import pinoHttp from "pino-http";
+import logger from "./utils/logger";
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+app.use(pinoHttp({ logger }));
 
 // Rate limit then routes
 app.use("/api/v1", apiRateLimiter, v1Routes);
