@@ -30,6 +30,7 @@ export const loginAdmin = async (data: LoginAdminInput) => {
   const token = signToken({
     admin_id: admin.admin_id,
     email_address: admin.email_address,
+    role: "admin",
   });
 
   return {
