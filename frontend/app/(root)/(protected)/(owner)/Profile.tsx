@@ -1,10 +1,64 @@
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { handleLogout } from "@/src/context/AuthContext";
+import { getAdminProfile } from "@/src/api/ownerService";
+import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
+const confirmLogout = () => {
+  Alert.alert("Logout", "Are you sure you want to log out?", [
+    { text: "Cancel", style: "cancel" },
+    { text: "Logout", style: "destructive", onPress: handleLogout },
+  ]);
+};
 export default function Profile() {
   const [showPassword, setShowPassword] = useState(false);
+  const token = useAuthStore((state) => state.token);
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["adminProfile"],
+    queryFn: getAdminProfile,
+    enabled: !!token,
+  });
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-100">
+        <ActivityIndicator size="large" color="#f97316" />
+        <Text className="mt-2 text-gray-500">Loading Profile...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    console.log(error);
+
+    return (
+      <View className="flex-1 justify-center items-center p-4">
+        <Text className="text-red-500 text-center">
+          Failed to load profile. Please try again.
+        </Text>
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          className="mt-4 bg-orange-500 p-2 rounded"
+        >
+          <Text className="text-white">Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ScrollView className="flex-1 bg-gray-100 px-4">
@@ -18,10 +72,10 @@ export default function Profile() {
 
           <View className="ml-4">
             <Text className="text-2xl font-bold text-gray-800">
-              Ramesh Kumar
+              {profile?.admin_name}
             </Text>
             <Text className="text-sm text-gray-500 mt-1">
-              Business Code : RG-1234
+              Business Code : {profile?.business_code}
             </Text>
           </View>
         </View>
@@ -42,16 +96,15 @@ export default function Profile() {
         </Text>
 
         {[
-          { label: "Full Name", value: "Ramesh Kumar" },
-          { label: "Phone Number", value: "+91 92764 73833" },
-          { label: "Alternate Phone Number", value: "+91 82764 73833" },
-          { label: "Email", value: "ramesh@gmail.com" },
-          { label: "Business Name", value: "Rahul Logistics" },
+          { label: "Full Name", value: profile?.admin_name },
+          { label: "Phone Number", value: profile?.phone_no },
+          { label: "Email", value: profile?.email_address },
+          { label: "Business Name", value: profile?.business_name },
         ].map((item, index) => (
           <View key={index} className="py-3 border-b border-gray-200">
             <Text className="text-sm text-gray-500">{item.label}</Text>
             <Text className="text-base font-medium text-gray-800 mt-1">
-              {item.value}
+              {isLoading ? "..." : item.value || "Not Provided"}
             </Text>
           </View>
         ))}
@@ -79,7 +132,10 @@ export default function Profile() {
       </View>
 
       {/* Logout Button */}
-      <TouchableOpacity className="mt-8 mb-10 bg-red-500 rounded-xl p-4 shadow-md active:opacity-80">
+      <TouchableOpacity
+        onPress={confirmLogout}
+        className="mt-8 mb-10 bg-red-500 rounded-xl p-4 shadow-md active:opacity-80"
+      >
         <View className="flex-row justify-center items-center">
           <FontAwesome name="sign-out" size={20} color="white" />
           <Text className="text-white text-base font-semibold ml-2">
