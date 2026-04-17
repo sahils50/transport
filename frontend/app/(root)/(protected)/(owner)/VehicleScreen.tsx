@@ -11,12 +11,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
 import { getAllVehicles } from "@/src/api/ownerService";
 import { useAuthStore } from "@/src/store/useAuthStore";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
 
 export default function VehiclesScreen() {
   const token = useAuthStore((state) => state.token);
-
   const {
     data: vehicles = [],
     isLoading,
@@ -26,7 +23,6 @@ export default function VehiclesScreen() {
     queryFn: getAllVehicles,
     enabled: !!token,
   });
-
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
@@ -34,7 +30,6 @@ export default function VehiclesScreen() {
       </View>
     );
   }
-
   return (
     <SafeAreaView className="flex-1 bg-white px-4">
       <StatusBar barStyle="dark-content" />
@@ -70,8 +65,6 @@ export default function VehiclesScreen() {
                 </View>
               </View>
             </View>
-
-            {/* MIDDLE STATS SECTION */}
             <View className="px-4 py-3 bg-gray-50/50 flex-row items-center border-y border-gray-50">
               <View className="flex-1 border-r border-gray-200">
                 <Text className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
@@ -81,7 +74,6 @@ export default function VehiclesScreen() {
                   {item.fuel_tank_capacity}L
                 </Text>
               </View>
-
               <View className="flex-1 px-4 border-r border-gray-200">
                 <Text className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
                   Mileage
@@ -90,7 +82,6 @@ export default function VehiclesScreen() {
                   {item.mileage} kmpl
                 </Text>
               </View>
-
               <View className="flex-1 pl-4">
                 <Text className="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
                   Trips
