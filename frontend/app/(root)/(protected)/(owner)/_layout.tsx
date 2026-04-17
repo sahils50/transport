@@ -134,18 +134,6 @@ export default function OwnerLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="Reports"
-        options={{
-          href: null,
-          title: "Reports",
-          headerShown: true,
-          header: () => (
-            <CustomHeader variant="default" title="Reports" showBack={true} />
-          ),
-        }}
-      />
       <Tabs.Screen
         name="ExpenseBreakdown"
         options={{
@@ -237,13 +225,23 @@ export default function OwnerLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="DelayTrip"
+        options={{
+          href: null,
+          title: "DelayTrip",
+          headerShown: true,
+          header: () => (
+            <CustomHeader variant="default" title="DelayTrip" showBack={true} />
+          ),
+        }}
+      />
 
       <Tabs.Screen
         name="add-vehicle"
         options={{
           href: null,
           title: "Add Driver",
-
           headerShown: true,
           header: () => (
             <CustomHeader
