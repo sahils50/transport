@@ -3,7 +3,7 @@ import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ActionButton from "@/Components/ActionButton";
 import { useRouter } from "expo-router";
-import { onLogin } from "@/app/src/context/AuthContext";
+import { onLogin } from "@/src/context/AuthContext";
 
 type Role = "owner" | "driver";
 

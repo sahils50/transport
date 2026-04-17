@@ -1,10 +1,25 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from "react";
+import { useAuthStore } from "../src/store/useAuthStore";
 import "../global.css";
 
 export default function Index() {
+  const token = useAuthStore((state) => state.token);
+  const role = useAuthStore((state) => state.role);
   const router = useRouter();
+  console.log("Current Auth State:", { token: !!token, role });
+  useEffect(() => {
+    if (token && role) {
+      // Remove the dots. Use absolute paths starting from /
+      if (role === "owner") {
+        router.replace("/(root)/(protected)/(owner)");
+      } else if (role === "driver") {
+        router.replace("/(root)/(protected)/(driver)");
+      }
+    }
+  }, [token, role]);
   return (
     <>
       <ImageBackground
