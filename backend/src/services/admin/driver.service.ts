@@ -23,7 +23,10 @@ export const getAllActiveDrivers = async (admin_id: number) => {
   return drivers;
 };
 
-export const postNewDriver = async (data: CreateDriverInput) => {
+export const postNewDriver = async (
+  admin_id: number,
+  data: CreateDriverInput,
+) => {
   const existingDriver = await prisma.driver.findFirst({
     where: {
       OR: [
@@ -41,7 +44,7 @@ export const postNewDriver = async (data: CreateDriverInput) => {
   }
   return await prisma.driver.create({
     data: {
-      admin_id: data.admin_id,
+      admin_id: admin_id,
       driver_name: data.driver_name,
       driver_phone_no1: data.driver_phone_no1,
       driver_phone_no2: data.driver_phone_no2,

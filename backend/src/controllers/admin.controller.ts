@@ -109,10 +109,17 @@ export const createDriverController = async (
   next: NextFunction,
 ) => {
   try {
-    const newDriver = await postNewDriver(req.body);
+    const admin_id = req.admin?.admin_id;
+
+    if (!admin_id) {
+      throw new AppError("Unauthorized: Admin ID not found in token", 401);
+    }
+
+    const newDriver = await postNewDriver(admin_id, req.body);
+
     return res.status(201).json({
       success: true,
-      message: "Driver create successfully",
+      message: "Driver created successfully",
       data: newDriver,
     });
   } catch (err) {
