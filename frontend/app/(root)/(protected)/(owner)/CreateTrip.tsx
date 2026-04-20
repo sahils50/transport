@@ -19,7 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 type Props = {
   onCreate: () => void;
 };
-
+// TODO: Integrate with backend
 const CreateTrip = ({ onCreate }: Props) => {
   return (
     <SafeAreaView className="flex-1 bg-orange-50 px-4 pt-2">

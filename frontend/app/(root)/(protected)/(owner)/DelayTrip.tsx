@@ -1,8 +1,14 @@
-import { View, Text, StatusBar, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-
+// TODO: Integrate with backend
 const DelayTrip = () => {
   interface Trip {
     id: string;
@@ -88,83 +94,91 @@ const DelayTrip = () => {
     <SafeAreaView className="flex-1 bg-orange-50 px-4 ">
       <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
       <ScrollView showsVerticalScrollIndicator={false} className="  ">
-      {DelayTrips.map((elem) => (
-        <View
-          key={elem.id}
-          className="bg-white rounded-2xl p-4 shadow-xl my-3 border border-orange-300"
-        >
-          {/* ROUTE */}
-          <View className="flex-row   bg-gray-100 border border-gray-300 shadow-2xl rounded-2xl px-4 py-3">
-            <View className="flex-1 flex-row items-center gap-3">
-              <View className="">
-                <Text className="font-bold text-lg">{elem.source}</Text>
-                <Text className="text-sm">{elem.start_date}</Text>
+        {DelayTrips.map((elem) => (
+          <View
+            key={elem.id}
+            className="bg-white rounded-2xl p-4 shadow-xl my-3 border border-orange-300"
+          >
+            {/* ROUTE */}
+            <View className="flex-row   bg-gray-100 border border-gray-300 shadow-2xl rounded-2xl px-4 py-3">
+              <View className="flex-1 flex-row items-center gap-3">
+                <View className="">
+                  <Text className="font-bold text-lg">{elem.source}</Text>
+                  <Text className="text-sm">{elem.start_date}</Text>
+                </View>
+
+                <FontAwesome name="long-arrow-right" size={22} color="orange" />
+
+                <View>
+                  <Text className="font-bold text-lg">{elem.destination}</Text>
+                  <Text className="text-sm">{elem.end_date}</Text>
+                </View>
               </View>
 
-              <FontAwesome name="long-arrow-right" size={22} color="orange" />
-
-              <View>
-                <Text className="font-bold text-lg">{elem.destination}</Text>
-                <Text className="text-sm">{elem.end_date}</Text>
+              <View className="bg-red-200 px-4 py-2 rounded-3xl items-center">
+                <Text className="text-red-500 font-bold text-lg">
+                  {elem.delayTime}
+                </Text>
               </View>
             </View>
 
-            <View className="bg-red-200 px-4 py-2 rounded-3xl items-center">
-              <Text className="text-red-500 font-bold text-lg">
-                {elem.delayTime}
+            <View className=" flex-row mx-3 mt-3 justify-start gap-4">
+              <MaterialCommunityIcons
+                name="truck-plus"
+                size={28}
+                color="orange"
+                className="bg-orange-100 px-2 py-2 rounded-xl"
+              />
+              <Text className="text-xl font-normal mt-2">
+                {elem.vehicleNumber}
               </Text>
             </View>
-          </View>
 
-          <View className=" flex-row mx-3 mt-3 justify-start gap-4">
-            <MaterialCommunityIcons
-              name="truck-plus"
-              size={28}
-              color="orange"
-              className="bg-orange-100 px-2 py-2 rounded-xl"
-            />
-            <Text className="text-xl font-normal mt-2">
-              {elem.vehicleNumber}
-            </Text>
-          </View>
-
-          <View className=" flex-row mx-3 mt-3 justify-start gap-4">
-            <MaterialCommunityIcons
-              name="account-plus"
-              size={28}
-              color="gray"
-              className="bg-gray-100 px-2 py-2 rounded-xl"
-            />
-            <Text className="text-xl font-normal mt-2">{elem.driver}</Text>
-          </View>
-
-          <View className="flex-row justify-between  mx-3 mt-5">
-            <Text className="  w-32 text-left">Planned ETA:</Text>
-            <Text className="text-right  w-32 font-medium">{elem.planTime}</Text>
-          </View>
-
-          <View className=" flex-row mx-3 mt-2 justify-between">
-            <Text className="text-left w-32 ">Actual ETA:</Text>
-            <Text className="text-right w-32 text-red-500 font-medium">{elem.actualTime}</Text>
-          </View>
-
-          {actions.map((elem) => (
-            <TouchableOpacity
-            activeOpacity={0.6}
-              key={elem.id}
-              className={`flex-row  ${elem.id == 3 ? "bg-orange-400" : `bg-${elem.color}-100`}  justify-center gap-2 mt-3 py-2 rounded-xl`}
-            >
+            <View className=" flex-row mx-3 mt-3 justify-start gap-4">
               <MaterialCommunityIcons
-                name={elem.icon}
+                name="account-plus"
                 size={28}
-                color={elem.color}
-                // className="bg-orange-300 px-2 py-2 rounded-3xl"
+                color="gray"
+                className="bg-gray-100 px-2 py-2 rounded-xl"
               />
-              <Text className={`text-lg font-medium ${elem.id === 3 ? "text-white" : `text-${elem.color}-500`}`}>{elem.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ))}
+              <Text className="text-xl font-normal mt-2">{elem.driver}</Text>
+            </View>
+
+            <View className="flex-row justify-between  mx-3 mt-5">
+              <Text className="  w-32 text-left">Planned ETA:</Text>
+              <Text className="text-right  w-32 font-medium">
+                {elem.planTime}
+              </Text>
+            </View>
+
+            <View className=" flex-row mx-3 mt-2 justify-between">
+              <Text className="text-left w-32 ">Actual ETA:</Text>
+              <Text className="text-right w-32 text-red-500 font-medium">
+                {elem.actualTime}
+              </Text>
+            </View>
+
+            {actions.map((elem) => (
+              <TouchableOpacity
+                activeOpacity={0.6}
+                key={elem.id}
+                className={`flex-row  ${elem.id == 3 ? "bg-orange-400" : `bg-${elem.color}-100`}  justify-center gap-2 mt-3 py-2 rounded-xl`}
+              >
+                <MaterialCommunityIcons
+                  name={elem.icon}
+                  size={28}
+                  color={elem.color}
+                  // className="bg-orange-300 px-2 py-2 rounded-3xl"
+                />
+                <Text
+                  className={`text-lg font-medium ${elem.id === 3 ? "text-white" : `text-${elem.color}-500`}`}
+                >
+                  {elem.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );

@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import ExpenseBreakdown from "./ExpenseBreakdown";
 import ProfitAnalysis from "./ProfitAnalysis";
-
+// TODO: Integrate with backend
 // 1. REUSABLE SUMMARY CARD
 const SummaryCard = ({ title, value, icon, color }: any) => (
   <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 w-[48%] mb-4">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 type IoniconName = ComponentProps<typeof Ionicons>["name"];
-
+// TODO: Integrate with backend in the upcoming future
 type Notification = {
   id: string;
   title: string;

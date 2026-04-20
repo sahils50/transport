@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
 } from "react-native";
-
+// TODO: Integrate with backend
 export default function EditProfile() {
   const [showPassword, setShowPassword] = useState(false);
 
