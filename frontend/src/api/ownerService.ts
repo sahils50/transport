@@ -29,3 +29,22 @@ export const getDashboardData = async (period: string = "weekly") => {
   );
   return response.data.data;
 };
+
+export const getExpensesForReview = async () => {
+  const response = await apiClient.get("/admin/expenses");
+  return response.data;
+};
+
+export const updateExpenseStatus = async ({
+  id,
+  status,
+}: {
+  id: number;
+  status: "paid" | "rejected";
+}) => {
+  const response = await apiClient.post("/admin/expenses/review", {
+    expense_id: id,
+    status: status,
+  });
+  return response.data;
+};
