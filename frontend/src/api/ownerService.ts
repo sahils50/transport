@@ -22,3 +22,10 @@ export const getAllTrips = async () => {
   const response = await apiClient.get("/admin/trips");
   return response.data.data;
 };
+
+export const getDashboardData = async (period: string = "weekly") => {
+  const response = await apiClient.get(
+    `/admin/dashboard?expense_period=${period}`,
+  );
+  return response.data.data;
+};
