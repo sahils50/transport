@@ -48,7 +48,6 @@ export default function DriverScreen() {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <View className="bg-white rounded-2xl mb-4 shadow-sm border border-gray-100 overflow-hidden relative">
-            {/* EDIT BUTTON - Moved to Top Right */}
             <TouchableOpacity
               className="absolute right-0 top-0 bg-orange-100 p-3 rounded-bl-2xl z-10"
               onPress={() =>
@@ -63,7 +62,6 @@ export default function DriverScreen() {
 
             {/* TOP SECTION: Name & Info */}
             <View className="p-4 pb-3 pr-14">
-              {" "}
               <Text
                 className="text-xl font-bold text-gray-800"
                 numberOfLines={1}

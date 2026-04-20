@@ -17,3 +17,8 @@ export const getAllVehicles = async () => {
   const response = await apiClient.get(`/admin/vehicles`);
   return response.data.data;
 };
+
+export const getAllTrips = async () => {
+  const response = await apiClient.get("/admin/trips");
+  return response.data.data;
+};
