@@ -48,3 +48,8 @@ export const updateExpenseStatus = async ({
   });
   return response.data;
 };
+
+export const createDriver = async (driverData: any) => {
+  const response = await apiClient.post("/admin/createDriver", driverData);
+  return response.data;
+};
