@@ -52,7 +52,7 @@ export default function DriverScreen() {
               className="absolute right-0 top-0 bg-orange-100 p-3 rounded-bl-2xl z-10"
               onPress={() =>
                 router.push({
-                  pathname: "./(owner)/edit-driver",
+                  pathname: "./edit-driver",
                   params: { driverId: item.driver_id },
                 })
               }
