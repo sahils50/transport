@@ -58,3 +58,8 @@ export const createVehicle = async (vehicleData: any) => {
   const response = await apiClient.post("/admin/vehicles", vehicleData);
   return response.data;
 };
+
+export const createTrip = async (tripData: any) => {
+  const response = await apiClient.post("/admin/trips", tripData);
+  return response.data;
+};
