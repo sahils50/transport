@@ -12,8 +12,9 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(public)" />
-        <Stack.Screen name="(protected)" />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(root)/(public)" />
+        <Stack.Screen name="(root)/(protected)" />
       </Stack>
     </QueryClientProvider>
   );

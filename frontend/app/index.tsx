@@ -6,13 +6,12 @@ import { useAuthStore } from "../src/store/useAuthStore";
 import "../global.css";
 
 export default function Index() {
-  const token = useAuthStore((state) => state.token);
-  const role = useAuthStore((state) => state.role);
+  const { token, role } = useAuthStore();
   const router = useRouter();
-  console.log("Current Auth State:", { token: !!token, role });
+
   useEffect(() => {
+    // If user is already logged in, redirect them away from Welcome Screen
     if (token && role) {
-      // Remove the dots. Use absolute paths starting from /
       if (role === "owner") {
         router.replace("/(root)/(protected)/(owner)");
       } else if (role === "driver") {
@@ -20,6 +19,7 @@ export default function Index() {
       }
     }
   }, [token, role]);
+
   return (
     <>
       <ImageBackground
@@ -45,7 +45,7 @@ export default function Index() {
         <TouchableOpacity
           activeOpacity={0.5}
           className="mx-auto"
-          onPress={() => router.push("../(public)/")}
+          onPress={() => router.push("/(root)/(public)/")}
         >
           <LinearGradient
             colors={["#FFA24C", "#FF7A18"]}

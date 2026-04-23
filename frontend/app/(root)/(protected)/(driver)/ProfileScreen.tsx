@@ -1,8 +1,29 @@
 import { FontAwesome } from "@expo/vector-icons"; // For icons like user, check, lock
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  Platform,
+} from "react-native";
+import { handleLogout } from "@/src/context/AuthContext";
 
 export default function ProfileScreen() {
+  const confirmLogout = () => {
+    if (Platform.OS === "web") {
+      if (window.confirm("Are you sure you want to log out?")) {
+        handleLogout();
+      }
+    } else {
+      Alert.alert("Logout", "Are you sure you want to log out?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Logout", style: "destructive", onPress: handleLogout },
+      ]);
+    }
+  };
+
   return (
     <ScrollView className="flex-1 px-4">
       {/* Header */}
@@ -70,7 +91,10 @@ export default function ProfileScreen() {
       </View>
 
       {/* Logout Button */}
-      <TouchableOpacity className="mt-auto mb-8 bg-red-500 rounded-lg p-4 shadow-md">
+      <TouchableOpacity
+        onPress={confirmLogout}
+        className="mt-auto mb-8 bg-red-500 rounded-lg p-4 shadow-md"
+      >
         <View className="flex-row justify-center items-center">
           <FontAwesome name="sign-out" size={20} color="white" />
           <Text className="text-white text-base font-bold ml-2">Logout</Text>

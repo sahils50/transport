@@ -34,7 +34,7 @@ export default function LoginScreen() {
     try {
       const result = await onLogin(formData, "owner"); // ✅ pass role
       if (result?.success) {
-        router.replace("../(protected)/(owner)/");
+        router.replace("/(root)/(protected)/(owner)");
       } else {
         Alert.alert("Login Failed", result?.message || "Invalid credentials");
       }
@@ -61,7 +61,7 @@ export default function LoginScreen() {
 
       if (result?.success) {
         // Redirect to driver dashboard
-        router.replace("../(protected)/(driver)/"); // adjust path if needed
+        router.replace("/(root)/(protected)/(driver)"); // adjust path if needed
       } else {
         Alert.alert("Login Failed", result?.message || "Invalid credentials");
       }
@@ -124,7 +124,7 @@ export default function LoginScreen() {
 
           <TouchableOpacity
             className="self-end mt-2"
-            onPress={() => router.push("./(public)/Forgotpass")}
+            onPress={() => router.push("./Forgotpass")}
           >
             <Text className="text-blue-500 text-sm">Forgot Password?</Text>
           </TouchableOpacity>
@@ -135,7 +135,7 @@ export default function LoginScreen() {
             Don't have an account?{" "}
             <Text
               className="text-orange-500 font-semibold"
-              onPress={() => router.push("./(public)/signup")}
+              onPress={() => router.push("./signup")}
             >
               Sign Up
             </Text>
@@ -171,7 +171,7 @@ export default function LoginScreen() {
 
           <TouchableOpacity
             className="mt-4"
-            onPress={() => router.push("./(public)/SelectContactMethod")}
+            onPress={() => router.push("./SelectContactMethod")}
           >
             <Text className="text-center text-blue-500 text-sm">
               Need help? Contact Owner

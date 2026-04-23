@@ -1,6 +1,6 @@
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -13,15 +13,21 @@ import { handleLogout } from "@/src/context/AuthContext";
 import { getAdminProfile } from "@/src/api/ownerService";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/src/store/useAuthStore";
+import { Platform } from "react-native";
 
 const confirmLogout = () => {
-  Alert.alert("Logout", "Are you sure you want to log out?", [
-    { text: "Cancel", style: "cancel" },
-    { text: "Logout", style: "destructive", onPress: handleLogout },
-  ]);
+  if (Platform.OS === "web") {
+    if (window.confirm("Are you sure you want to log out?")) {
+      handleLogout();
+    }
+  } else {
+    Alert.alert("Logout", "Are you sure you want to log out?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Logout", style: "destructive", onPress: handleLogout },
+    ]);
+  }
 };
 export default function Profile() {
-  const [showPassword, setShowPassword] = useState(false);
   const token = useAuthStore((state) => state.token);
   const {
     data: profile,
@@ -101,34 +107,13 @@ export default function Profile() {
           { label: "Email", value: profile?.email_address },
           { label: "Business Name", value: profile?.business_name },
         ].map((item, index) => (
-          <View key={index} className="py-3 border-b border-gray-200">
+          <View key={index} className={`py-3 ${index !== 3 ? 'border-b border-gray-200' : ''}`}>
             <Text className="text-sm text-gray-500">{item.label}</Text>
             <Text className="text-base font-medium text-gray-800 mt-1">
               {isLoading ? "..." : item.value || "Not Provided"}
             </Text>
           </View>
         ))}
-
-        {/* Password Row */}
-        <View className="py-3 flex-row justify-between items-center">
-          <View>
-            <Text className="text-sm text-gray-500">Password</Text>
-            <Text className="text-base font-medium text-gray-800 mt-1">
-              {showPassword ? "MyPassword123" : "************"}
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            className="p-2"
-          >
-            <Ionicons
-              name={showPassword ? "eye-off-outline" : "eye-outline"}
-              size={22}
-              color="#6B7280"
-            />
-          </TouchableOpacity>
-        </View>
       </View>
 
       {/* Logout Button */}
