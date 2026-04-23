@@ -15,9 +15,13 @@ export const apiClient = axios.create({
 
 // Request Interceptor
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const { token, role } = useAuthStore.getState();
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (role === "driver") {
+      config.headers.Authorization = token;
+    } else {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
