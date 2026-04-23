@@ -1,20 +1,51 @@
 import DriverForm from "@/Components/DriverForm";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
-import { ScrollView, Text, TouchableOpacity } from "react-native";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useQuery } from "@tanstack/react-query";
+import { getDriverById } from "@/src/api/ownerService";
 
 export default function EditDriverScreen() {
   const { driverId } = useLocalSearchParams();
 
   const [form, setForm] = useState({
-    name: "Ramesh Kumar",
-    phone: "8877698543",
-    altPhone: "9876543210",
-    licenseNumber: "MH11 CX 777555555",
-    licenseType: "HMV",
-    licenseExpiry: "12-05-2027",
+    name: "",
+    phone: "",
+    altPhone: "",
+    licenseNumber: "",
+    licenseType: "",
+    licenseExpiry: "",
   });
+
+  const { data: driver, isLoading } = useQuery({
+    queryKey: ["driver", driverId],
+    queryFn: () => getDriverById(Number(driverId)),
+    enabled: !!driverId,
+  });
+
+  useEffect(() => {
+    if (driver) {
+      // Format date from ISO to dd-mm-yyyy if needed
+      let formattedExpiry = "";
+      if (driver.driver_license_expiry_date) {
+        const date = new Date(driver.driver_license_expiry_date);
+        const dd = String(date.getDate()).padStart(2, "0");
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const yyyy = date.getFullYear();
+        formattedExpiry = `${dd}-${mm}-${yyyy}`;
+      }
+
+      setForm({
+        name: driver.driver_name || "",
+        phone: driver.driver_phone_no1 || "",
+        altPhone: driver.driver_phone_no2 || "",
+        licenseNumber: driver.driver_license_no || "",
+        licenseType: driver.driver_license_type || "",
+        licenseExpiry: formattedExpiry,
+      });
+    }
+  }, [driver]);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -39,8 +70,17 @@ export default function EditDriverScreen() {
     if (!validateForm()) return;
 
     console.log("Updated Driver:", driverId, form);
+    // TODO: Call update API
     router.back();
   };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-white justify-center items-center">
+        <ActivityIndicator size="large" color="#f97316" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white px-4">

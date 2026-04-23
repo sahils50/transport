@@ -10,7 +10,7 @@ export default function DriverHome() {
 
   const handleStartTrip = () => setStatus("in-progress");
   const handleEndTrip = () => setStatus("scheduled");
-
+  // TODO: Integrate with backend
   return (
     <ScrollView className="flex-1 bg-gray-50">
       <View className="flex-1 px-5 pt-6 pb-12">
@@ -66,8 +66,6 @@ export default function DriverHome() {
             <InProgressContent onEnd={handleEndTrip} />
           )}
         </View>
-
-        {/* Expense Summary - shown in both modes but with different visuals */}
         <ExpenseSummary status={status} />
       </View>
     </ScrollView>
@@ -311,7 +309,6 @@ function ActionButton({
     </TouchableOpacity>
   );
 }
-
 function DetailRow({
   icon,
   label,

@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-
+// Integrate with backend
 export default function TripsScreen() {
   return (
     <ScrollView className="flex-1 bg-gray-50">

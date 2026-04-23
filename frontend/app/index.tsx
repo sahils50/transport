@@ -1,10 +1,25 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from "react";
+import { useAuthStore } from "../src/store/useAuthStore";
 import "../global.css";
 
 export default function Index() {
+  const { token, role } = useAuthStore();
   const router = useRouter();
+
+  useEffect(() => {
+    // If user is already logged in, redirect them away from Welcome Screen
+    if (token && role) {
+      if (role === "owner") {
+        router.replace("/(root)/(protected)/(owner)");
+      } else if (role === "driver") {
+        router.replace("/(root)/(protected)/(driver)");
+      }
+    }
+  }, [token, role]);
+
   return (
     <>
       <ImageBackground
@@ -30,7 +45,7 @@ export default function Index() {
         <TouchableOpacity
           activeOpacity={0.5}
           className="mx-auto"
-          onPress={() => router.push("../(protected)/(owner)")}
+          onPress={() => router.push("/(root)/(public)/")}
         >
           <LinearGradient
             colors={["#FFA24C", "#FF7A18"]}

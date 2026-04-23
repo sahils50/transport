@@ -1,158 +1,125 @@
 import { View, Text, TextInput } from "react-native";
-import { useMemo, useState } from "react";
-import Feather from "@expo/vector-icons/Feather";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import React from "react";
+import {
+  Feather,
+  MaterialIcons,
+  Entypo,
+  FontAwesome5,
+} from "@expo/vector-icons";
 
-/* ---------------- MOCK DATA (REPLACE WITH API) ---------------- */
+interface ExpenseRuleProps {
+  fuelLimit: number;
+  tollLimit: number;
+  otherLimit: number;
+  onUpdate: (key: string, value: number) => void;
+}
 
-const routeData = {
-  distanceKm: 500,
-  tollAmount: 3500,
-};
-
-const vehicleData = {
-  mileage: 5, // km per litre
-  fuelPrice: 95, // ₹ per litre
-};
-
-/* ---------------- COMPONENT ---------------- */
-
-export default function ExpenseRule() {
-  /* AUTO FUEL COST */
-  const autoFuelCost = useMemo(() => {
-    return Math.round(
-      (routeData.distanceKm / vehicleData.mileage) *
-        vehicleData.fuelPrice
-    );
-  }, []);
-
-  /* STATES */
-  const [fuelLimit, setFuelLimit] = useState(autoFuelCost);
-  const [otherExpenses, setOtherExpenses] = useState(9500);
-
-  const tollLimit = routeData.tollAmount;
-
-  const totalLimit = useMemo(() => {
-    return fuelLimit + tollLimit + otherExpenses;
-  }, [fuelLimit, tollLimit, otherExpenses]);
+export default function ExpenseRule({
+  fuelLimit,
+  tollLimit,
+  otherLimit,
+  onUpdate,
+}: ExpenseRuleProps) {
+  const totalLimit =
+    (Number(fuelLimit) || 0) +
+    (Number(tollLimit) || 0) +
+    (Number(otherLimit) || 0);
 
   return (
-    <View className="bg-white rounded-xl p-4 mt-4">
-<View className='flex-row gap-2'>
-      <FontAwesome5 name="money-check-alt" size={24} color="#F97316" />
-      <Text className="text-lg font-semibold text-gray-600 mb-2">Expense Rule</Text>
+    <View className="bg-white rounded-[24px] p-5 mt-4 shadow-sm border border-gray-100">
+      <View className="flex-row items-center gap-3 mb-6">
+        <View className="bg-orange-100 p-2 rounded-xl">
+          <FontAwesome5 name="money-check-alt" size={18} color="#F97316" />
+        </View>
+        <Text className="text-lg font-black text-gray-800">Expense Limits</Text>
       </View>
 
-    <View className="  flex-row flex-wrap gap-2 justify-between mt-4">
+      <View className="flex-row flex-wrap justify-between">
+        {/* FUEL LIMIT */}
+        <ExpenseCard
+          title="Fuel"
+          icon={
+            <MaterialIcons name="local-gas-station" size={20} color="#F97316" />
+          }
+          value={fuelLimit}
+          onChange={(val) => onUpdate("fuel_limit", val)}
+          editable
+          description="Diesel/Petrol budget"
+        />
 
-      {/* FUEL LIMIT (EDITABLE) */}
-      <Card
-        title="Fuel Limit"
-        icon={<MaterialIcons name="local-gas-station" size={22} color="#F97316" />}
-        editable
-        value={fuelLimit}
-        onChange={setFuelLimit}
-        description="Based on distance & vehicle mileage"
-      />
+        {/* TOLL LIMIT */}
+        <ExpenseCard
+          title="Toll"
+          icon={<MaterialIcons name="toll" size={20} color="#F97316" />}
+          value={tollLimit}
+          onChange={(val) => onUpdate("toll_limit", val)}
+          editable
+          description="FastTag / Cash tolls"
+        />
 
-      {/* TOLL LIMIT (AUTO) */}
-      <Card
-        title="Toll Limit"
-        icon={<MaterialIcons name="toll" size={22} color="#F97316" />}
-        value={tollLimit}
-        description="Auto-calculated from route"
-        disabled
-      />
+        {/* OTHER EXPENSES */}
+        <ExpenseCard
+          title="Others"
+          icon={<Feather name="tool" size={20} color="#F97316" />}
+          value={otherLimit}
+          onChange={(val) => onUpdate("other_cost_limit", val)}
+          editable
+          description="Food & Maintenance"
+        />
 
-      {/* OTHER EXPENSES (EDITABLE) */}
-      <Card
-        title="Other Expenses"
-        icon={<Feather name="tool" size={22} color="#F97316" />}
-        editable
-        value={otherExpenses}
-        onChange={setOtherExpenses}
-        description="For maintenance, food, etc."
-      />
-
-      {/* TOTAL (AUTO) */}
-      <Card
-        title="Total Limit"
-        icon={<Entypo name="calculator" size={22} color="#F97316" />}
-        value={totalLimit}
-        description="Auto-calculated total"
-        highlight
-        disabled
-      />
-    </View>
+        {/* TOTAL */}
+        <ExpenseCard
+          title="Total"
+          icon={<Entypo name="calculator" size={20} color="#F97316" />}
+          value={totalLimit}
+          description="Auto-calculated sum"
+          highlight
+        />
+      </View>
     </View>
   );
 }
 
-/* ---------------- CARD UI ---------------- */
-
-function Card({
+function ExpenseCard({
   title,
   icon,
   value,
   onChange,
   editable,
-  disabled,
   description,
   highlight,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  value: number;
-  onChange?: (val: number) => void;
-  editable?: boolean;
-  disabled?: boolean;
-  description: string;
-  highlight?: boolean;
-}) {
+}: any) {
   return (
-    <View className="w-[48%] bg-white border border-gray-200 rounded-lg p-2">
-
-      {/* HEADER */}
-      <View className="flex-row items-center gap-2 mb-3">
+    <View className="w-[48%] bg-gray-50 border border-gray-100 rounded-2xl p-3 mb-3">
+      <View className="flex-row items-center gap-2 mb-2">
         {icon}
-        <Text className="font-semibold text-gray-800">
-          {title}
-        </Text>
+        <Text className="font-bold text-gray-700 text-xs">{title}</Text>
       </View>
 
-      {/* VALUE */}
       {editable ? (
-        <TextInput
-          value={String(value)}
-          keyboardType="number-pad"
-          onChangeText={(v) =>
-            onChange?.(Number(v) || 0)
-          }
-          className="border border-orange-300 rounded-lg px-3 py-2 text-orange-600 font-bold text-lg"
-        />
+        <View className="flex-row items-center bg-white border border-gray-200 rounded-xl px-2">
+          <Text className="text-gray-400 font-bold">₹</Text>
+          <TextInput
+            value={String(value)}
+            keyboardType="number-pad"
+            onChangeText={(v) =>
+              onChange?.(Number(v.replace(/[^0-9]/g, "")) || 0)
+            }
+            className="flex-1 py-2 px-1 text-orange-600 font-black text-base"
+          />
+        </View>
       ) : (
         <View
-          className={`rounded-lg px-3 py-2 ${
-            highlight
-              ? "bg-orange-100"
-              : "bg-gray-100"
-          }`}
+          className={`rounded-xl px-3 py-2 ${highlight ? "bg-orange-500" : "bg-gray-200"}`}
         >
           <Text
-            className={`font-bold text-lg ${
-              highlight
-                ? "text-orange-600"
-                : "text-gray-700"
-            }`}
+            className={`font-black text-base ${highlight ? "text-white" : "text-gray-700"}`}
           >
             ₹{value.toLocaleString("en-IN")}
           </Text>
         </View>
       )}
-
-      {/* DESCRIPTION */}
-      <Text className="text-xs text-gray-500 mt-2">
+      <Text className="text-[9px] text-gray-400 mt-2 leading-[10px]">
         {description}
       </Text>
     </View>

@@ -1,136 +1,174 @@
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  View,
+  ActivityIndicator,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
+import { getDashboardData } from "@/src/api/ownerService";
+import { useAuthStore } from "@/src/store/useAuthStore";
+
+// Components
 import ExpensesAnalysis from "@/Components/Dashboard_compo/ExpensesAnalysis";
 import Performance from "@/Components/Dashboard_compo/Performance";
 import QuickAction from "@/Components/Dashboard_compo/QuickAction";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
-import { ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-// import LiveTripsmap from "@/Components/Dashboard_compo/LiveTripsmap";
 
-type StatItem = {
-  id: number;
-  title: string;
-  count: number;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  bg: string;
-  color: string;
-};
+const StatCard = ({ title, count, icon, bg, color }: any) => (
+  <View className="w-[48%] bg-white rounded-2xl p-4 mb-4 flex-row items-center border border-gray-100 shadow-sm">
+    <View className={`${bg} p-3 rounded-xl mr-3`}>
+      <MaterialCommunityIcons name={icon} size={22} color={color} />
+    </View>
+    <View>
+      <Text className="text-lg font-black text-gray-900">{count}</Text>
+      <Text className="text-[10px] uppercase font-bold text-gray-400 tracking-tight">
+        {title}
+      </Text>
+    </View>
+  </View>
+);
 
 const Dashboard: React.FC = () => {
-  const stats: StatItem[] = [
-    {
-      id: 1,
-      title: "Active Trips",
-      count: 12,
-      icon: "map-marker-path",
-      bg: "bg-blue-100",
-      color: "#2563EB",
-    },
-    {
-      id: 2,
-      title: "Delay Trips",
-      count: 10,
-      icon: "clock-alert-outline",
-      bg: "bg-red-100",
-      color: "#DC2626",
-    },
-    {
-      id: 3,
-      title: "Idle Vehicles",
-      count: 5,
-      icon: "truck-check",
-      bg: "bg-yellow-100",
-      color: "#CA8A04",
-    },
-    {
-      id: 4,
-      title: "Schedule Trips",
-      count: 12,
-      icon: "calendar-clock",
-      bg: "bg-green-100",
-      color: "#16A34A",
-    },
-  ];
+  const token = useAuthStore((state) => state.token);
+  const [period, setPeriod] = useState("weekly");
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["dashboard", period],
+    queryFn: () => getDashboardData(period),
+    enabled: !!token,
+  });
+
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#f97316" />
+        <Text className="mt-2 text-gray-400 font-medium">
+          Loading Fleet Data...
+        </Text>
+      </View>
+    );
+  }
+
+  const overview = data?.overview || {
+    active_trips: 0,
+    delayed_trips: 0,
+    scheduled_trips: 0,
+    idle_vehicle: 0,
+  };
 
   return (
-    <ScrollView>
-      <SafeAreaView className="flex-1 bg-gray-100 px-4 ">
-        <View className="flex-row flex-wrap justify-between">
-          {stats.map((item) => (
-            <View
-              key={item.id}
-              className="w-[48%] bg-white rounded-xl p-4 mb-4 flex-row items-center"
-              style={{
-                elevation: 8,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 5 },
-                shadowOpacity: 0.3,
-                shadowRadius: 6,
-              }}
-            >
-              <View className={`${item.bg} p-3 rounded-lg mr-3`}>
-                <MaterialCommunityIcons
-                  name={item.icon}
-                  size={26}
-                  color={item.color}
-                />
-              </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }
+      >
+        <View className="px-4 pt-4">
+          {/* HEADER */}
+          <View className="flex-row justify-between items-end mb-6">
+            <View>
+              <Text className="text-sm font-bold text-orange-500 uppercase tracking-widest">
+                Fleet Overview
+              </Text>
+              <Text className="text-2xl font-black text-gray-900">
+                Control Center
+              </Text>
+            </View>
 
-              <View>
-                <Text className="text-xl font-bold text-gray-900">
-                  {item.count}
-                </Text>
-                <Text className="text-sm text-gray-500">{item.title}</Text>
+            {/* PERIOD SELECTOR */}
+            <View className="flex-row bg-gray-100 p-1 rounded-lg">
+              {["today", "weekly", "monthly"].map((p) => (
+                <TouchableOpacity
+                  key={p}
+                  onPress={() => setPeriod(p)}
+                  className={`px-3 py-1 rounded-md ${period === p ? "bg-white shadow-sm" : ""}`}
+                >
+                  <Text
+                    className={`text-[10px] font-bold capitalize ${period === p ? "text-orange-600" : "text-gray-500"}`}
+                  >
+                    {p}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
+          {/* STATS GRID MAPPED TO API */}
+          <View className="flex-row flex-wrap justify-between">
+            <StatCard
+              title="Active Trips"
+              count={overview.active_trips}
+              icon="map-marker-path"
+              bg="bg-blue-50"
+              color="#2563EB"
+            />
+            <StatCard
+              title="Delayed"
+              count={overview.delayed_trips}
+              icon="clock-alert-outline"
+              bg="bg-red-50"
+              color="#DC2626"
+            />
+            <StatCard
+              title="Idle Fleet"
+              count={overview.idle_vehicle}
+              icon="truck-check"
+              bg="bg-yellow-50"
+              color="#CA8A04"
+            />
+            <StatCard
+              title="Scheduled"
+              count={overview.scheduled_trips}
+              icon="calendar-clock"
+              bg="bg-green-50"
+              color="#16A34A"
+            />
+          </View>
+
+          {/* PASSING API DATA TO SUB-COMPONENTS */}
+          <View className="mt-4">
+            <QuickAction />
+          </View>
+
+          <View className="mt-8">
+            <View className="bg-white rounded-3xl border border-gray-100 p-2 shadow-sm">
+              <ExpensesAnalysis data={data?.expense_analysis} />
+            </View>
+          </View>
+
+          <View className="mt-6 pb-10">
+            <View className="bg-white rounded-3xl border border-gray-100 p-4 shadow-sm">
+              <Text className="font-bold text-gray-800 mb-4">
+                Monthly Summary
+              </Text>
+              <View className="flex-row justify-between">
+                <View>
+                  <Text className="text-gray-400 text-xs uppercase font-bold">
+                    Total Trips
+                  </Text>
+                  <Text className="text-lg font-black">
+                    {data?.monthly_summary?.total_trips}
+                  </Text>
+                </View>
+                <View className="items-end">
+                  <Text className="text-gray-400 text-xs uppercase font-bold">
+                    Actual Exp.
+                  </Text>
+                  <Text className="text-lg font-black text-orange-600">
+                    ₹{data?.monthly_summary?.actual_expense}
+                  </Text>
+                </View>
               </View>
             </View>
-          ))}
-        </View>
-
-        <View className="">
-          <MaterialCommunityIcons
-            name="map-marker-path"
-            size={30}
-            color="orange"
-          />
-          <Text className="font-extrabold text-gray-700 px-4 text-2xl">
-            Live Trips
-          </Text>
-
-          {/* <View>
-            <LiveTripsmap />
           </View>
-        */}
         </View>
-
-        <View>
-          <QuickAction />
-        </View>
-
-        <View className="">
-          <ExpensesAnalysis />
-        </View>
-
-        <View className="">
-          <Performance />
-        </View>
-        {/* 
-        <View className="">
-          <ScheduleTrip />
-        </View>
-
-        <View className="">
-          <CostEstimation />
-        </View>
-
-        <View className="">
-          <ExpensesRules />
-        </View>
-
-        <View className="">
-          <ReviewAndCreate />
-        </View> */}
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

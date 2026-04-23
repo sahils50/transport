@@ -3,30 +3,28 @@ import React, { useState } from "react";
 import { FontAwesome5, Fontisto } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const TripSchedule = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+interface ScheduleProps {
+  startDate: Date | null;
+  endDate: Date | null;
+  onUpdate: (
+    key: "scheduled_start_at" | "scheduled_end_at",
+    value: Date,
+  ) => void;
+}
 
-  const [activeField, setActiveField] = useState<
-    "start" | "end" | null
-  >(null);
-
+const TripSchedule = ({ startDate, endDate, onUpdate }: ScheduleProps) => {
+  const [activeField, setActiveField] = useState<"start" | "end" | null>(null);
   const [mode, setMode] = useState<"date" | "time">("date");
 
-  const formatDateTime = (date: Date) => {
+  const formatDateTime = (date: Date | null) => {
+    if (!date) return "Select date & time";
     return date.toLocaleString("en-IN", {
       day: "2-digit",
       month: "short",
-      year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     });
-  };
-
-  const openPicker = (field: "start" | "end") => {
-    setActiveField(field);
-    setMode("date");
   };
 
   const onChange = (_: any, selected?: Date) => {
@@ -36,111 +34,101 @@ const TripSchedule = () => {
     }
 
     if (mode === "date") {
-      const base =
-        activeField === "start" ? startDate : endDate;
-
-      const newDate = base ? new Date(base) : new Date();
-
+      // Step 1: Set Date
+      const current =
+        (activeField === "start" ? startDate : endDate) || new Date();
+      const newDate = new Date(current);
       newDate.setFullYear(
         selected.getFullYear(),
         selected.getMonth(),
-        selected.getDate()
+        selected.getDate(),
       );
 
-      activeField === "start"
-        ? setStartDate(newDate)
-        : setEndDate(newDate);
+      onUpdate(
+        activeField === "start" ? "scheduled_start_at" : "scheduled_end_at",
+        newDate,
+      );
 
-      setMode("time");
+      // Step 2: Switch to Time
+      if (Platform.OS === "android") {
+        setMode("time"); // Android needs explicit state switch to show second picker
+      } else {
+        setMode("time");
+      }
     } else {
-      const base =
-        activeField === "start" ? startDate : endDate;
+      // Step 3: Set Time
+      const current =
+        (activeField === "start" ? startDate : endDate) || new Date();
+      const newDate = new Date(current);
+      newDate.setHours(selected.getHours(), selected.getMinutes());
 
-      if (!base) return;
-
-      const newDate = new Date(base);
-      newDate.setHours(
-        selected.getHours(),
-        selected.getMinutes()
+      onUpdate(
+        activeField === "start" ? "scheduled_start_at" : "scheduled_end_at",
+        newDate,
       );
-
-      activeField === "start"
-        ? setStartDate(newDate)
-        : setEndDate(newDate);
-
       setActiveField(null);
+      setMode("date"); // Reset for next use
     }
   };
 
   return (
-    <View className="bg-white rounded-xl p-4 mt-4">
-      {/* HEADER */}
-      <View className="flex-row gap-2 items-center mb-2">
-        <Fontisto name="date" size={22} color="#F78231" />
-        <Text className="text-lg font-semibold text-gray-600">
-          Trip Schedule
-        </Text>
+    <View className="bg-white rounded-[24px] p-5 mt-4 shadow-sm border border-gray-100">
+      <View className="flex-row gap-3 items-center mb-6">
+        <View className="bg-orange-100 p-2 rounded-xl">
+          <Fontisto name="date" size={18} color="#F78231" />
+        </View>
+        <Text className="text-lg font-black text-gray-800">Trip Schedule</Text>
       </View>
 
-      <View className="flex-row gap-4">
-        {/* START DATE & TIME */}
-        <View className="flex-1">
-          <Text className="text-md font-medium mt-3 mb-2">
-            Start Date & Time
+      <View className="space-y-4">
+        {/* START DATE */}
+        <View>
+          <Text className="text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">
+            Departure
           </Text>
-
           <TouchableOpacity
-            className="flex-row items-center gap-2 bg-gray-100 rounded-lg px-4 py-3"
-            onPress={() => openPicker("start")}
-            activeOpacity={0.7}
+            className="flex-row items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-4 py-4"
+            onPress={() => {
+              setActiveField("start");
+              setMode("date");
+            }}
           >
-            <FontAwesome5
-              name="calendar-alt"
-              size={16}
-              color="#F78231"
-            />
-            <Text className="text-gray-700 text-sm font-medium">
-              {startDate
-                ? formatDateTime(startDate)
-                : "Select start date & time"}
+            <FontAwesome5 name="calendar-alt" size={16} color="#F78231" />
+            <Text
+              className={`font-bold ${startDate ? "text-gray-800" : "text-gray-400"}`}
+            >
+              {formatDateTime(startDate)}
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* END DATE & TIME */}
-        <View className="flex-1">
-          <Text className="text-md font-medium mt-3 mb-2">
-            End Date & Time
+        {/* END DATE */}
+        <View className="mt-4">
+          <Text className="text-[10px] font-bold text-gray-400 uppercase mb-2 ml-1">
+            Expected Arrival
           </Text>
-
           <TouchableOpacity
-            className="flex-row items-center gap-2 bg-gray-100 rounded-lg px-4 py-3"
-            onPress={() => openPicker("end")}
-            activeOpacity={0.7}
+            className="flex-row items-center gap-3 bg-gray-50 border border-gray-100 rounded-2xl px-4 py-4"
+            onPress={() => {
+              setActiveField("end");
+              setMode("date");
+            }}
           >
-            <FontAwesome5
-              name="calendar-alt"
-              size={16}
-              color="#F78231"
-            />
-            <Text className="text-gray-700 text-sm font-medium">
-              {endDate
-                ? formatDateTime(endDate)
-                : "Select end date & time"}
+            <FontAwesome5 name="calendar-alt" size={16} color="#F78231" />
+            <Text
+              className={`font-bold ${endDate ? "text-gray-800" : "text-gray-400"}`}
+            >
+              {formatDateTime(endDate)}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* DATE TIME PICKER */}
       {activeField && (
         <DateTimePicker
-          value={
-            activeField === "start"
-              ? startDate || new Date()
-              : endDate || new Date()
-          }
+          value={(activeField === "start" ? startDate : endDate) || new Date()}
           mode={mode}
+          is24Hour={false}
           display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={onChange}
         />

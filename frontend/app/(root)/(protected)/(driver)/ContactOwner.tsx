@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type ContactMethod = "call" | "whatsapp" | null;
-
+// TODO: Integrate with backend
 export default function ContactOwner() {
   const [selectedMethod, setSelectedMethod] = useState<ContactMethod>(null);
   const [modalVisible, setModalVisible] = useState(false);

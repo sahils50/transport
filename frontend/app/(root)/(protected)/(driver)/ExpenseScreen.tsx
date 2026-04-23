@@ -1,172 +1,148 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { getDriverExpenses } from "@/src/api/driverService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExpenseScreen() {
-  return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="px-4 pt-5 pb-12">
-        {/* Current Trip Section */}
-        <View className="mb-8">
-          <View className="flex-row items-center mb-3">
-            <MaterialCommunityIcons
-              name="truck-fast"
-              size={22}
-              color="#f97316"
-            />
-            <Text className="ml-2 text-xl font-bold text-gray-900">
-              Current Trip
-            </Text>
-          </View>
-
-          <View className="bg-white rounded-2xl shadow-sm border border-gray-200/70 overflow-hidden">
-            {/* Top row - route + status */}
-            <View className="px-5 pt-5 pb-3 flex-row items-center justify-between border-b border-gray-100">
-              <View className="flex-row items-center flex-1">
-                <Text className="text-xl font-semibold text-gray-900">
-                  Mumbai ⇄ Surat
-                </Text>
-              </View>
-
-              <View className="bg-green-100 px-3 py-1 rounded-full">
-                <Text className="text-green-700 font-medium text-sm">
-                  Within budget
-                </Text>
-              </View>
-            </View>
-
-            {/* Trip ID & Date */}
-            <View className="px-5 py-3 border-b border-gray-100">
-              <Text className="text-base font-medium text-gray-800">
-                TRIP-789011 01-12-2025
-              </Text>
-            </View>
-
-            {/* Amount + Pending status */}
-            <View className="px-5 py-4 flex-row items-center justify-between">
-              <Text className="text-2xl font-bold text-gray-900">₹7,800</Text>
-
-              <View className="flex-row items-center bg-amber-100 px-3 py-1.5 rounded-full">
-                <MaterialCommunityIcons
-                  name="alert-circle-outline"
-                  size={18}
-                  color="#d97706"
-                />
-                <Text className="ml-1.5 text-amber-800 font-medium text-sm">
-                  Pending
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        {/* Past Trips Section */}
-        <View>
-          <View className="flex-row items-center mb-4">
-            <MaterialCommunityIcons name="history" size={22} color="#4b5563" />
-            <Text className="ml-2 text-xl font-bold text-gray-900">
-              Past Trips
-            </Text>
-          </View>
-
-          <View className="space-y-4">
-            {/* Past Trip 1 - Within budget, Approved */}
-            <PastTripCard
-              route="Mumbai ⇄ Surat"
-              tripId="TRIP-789011"
-              date="1 Mar 2025"
-              budgetStatus="Within budget"
-              budgetColor="bg-green-100 text-green-700"
-              approvalStatus="Approved"
-              approvalColor="bg-green-100 text-green-700"
-              amount="₹7,800"
-            />
-
-            {/* Past Trip 2 - Over budget, Approved */}
-            <PastTripCard
-              route="Mumbai → Surat"
-              tripId="TRIP-789011"
-              date="10-12 Feb 2025"
-              budgetStatus="Over budget"
-              budgetColor="bg-orange-100 text-orange-700"
-              approvalStatus="Approved"
-              approvalColor="bg-green-100 text-green-700"
-              amount="₹7,800"
-            />
-
-            {/* Past Trip 3 - Over budget, Rejected */}
-            <PastTripCard
-              route="Mumbai → Surat"
-              tripId="TRIP-789011"
-              date="8 Feb 2025"
-              budgetStatus="Over budget"
-              budgetColor="bg-orange-100 text-orange-700"
-              approvalStatus="Rejected"
-              approvalColor="bg-red-100 text-red-700"
-              amount="₹7,800"
-            />
-          </View>
-        </View>
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["driverExpenses"],
+    queryFn: () => getDriverExpenses(1, 20),
+  });
+  const expenses = data?.data || [];
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-50">
+        <ActivityIndicator size="large" color="#f97316" />
       </View>
-    </ScrollView>
-  );
-}
-
-function PastTripCard({
-  route,
-  tripId,
-  date,
-  budgetStatus,
-  budgetColor,
-  approvalStatus,
-  approvalColor,
-  amount,
-}: {
-  route: string;
-  tripId: string;
-  date: string;
-  budgetStatus: string;
-  budgetColor: string;
-  approvalStatus: string;
-  approvalColor: string;
-  amount: string;
-}) {
-  const router = useRouter();
-  const handlePress = () => {
-    router.push(`/ExpenseDetails`);
-  };
-
+    );
+  }
   return (
-    <TouchableOpacity
-      activeOpacity={0.75}
-      onPress={handlePress}
-      className="mb-4" // spacing between cards
-    >
-      <View className="bg-white rounded-2xl shadow-sm border border-gray-200/70 overflow-hidden">
-        {/* Top row - route + budget status */}
-        <View className="px-5 pt-5 pb-3 flex-row items-center justify-between border-b border-gray-100">
-          <Text className="text-lg font-semibold text-gray-900">{route}</Text>
-
-          <View className={`${budgetColor} px-3 py-1 rounded-full`}>
-            <Text className="text-sm font-medium">{budgetStatus}</Text>
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <View className="px-4 pt-4 pb-2">
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center">
+            <View className="bg-orange-100 p-2 rounded-xl">
+              <MaterialCommunityIcons
+                name="wallet-outline"
+                size={22}
+                color="#f97316"
+              />
+            </View>
+            <Text className="ml-3 text-xl font-black text-gray-900">
+              My Expenses
+            </Text>
           </View>
-        </View>
-
-        {/* Trip ID & Date */}
-        <View className="px-5 py-3 border-b border-gray-100">
-          <Text className="text-base font-medium text-gray-800">
-            {tripId} {date}
+          <Text className="text-gray-400 font-bold text-xs bg-gray-200 px-3 py-1 rounded-full">
+            {data?.pagination?.total_records || 0} Total
           </Text>
         </View>
+      </View>
 
-        {/* Amount + Approval status */}
-        <View className="px-5 py-4 flex-row items-center justify-between">
-          <Text className="text-2xl font-bold text-gray-900">{amount}</Text>
-
-          <View className={`${approvalColor} px-3 py-1.5 rounded-full`}>
-            <Text className="text-sm font-medium">
-              {approvalStatus === "Approved" ? "✓ Approved" : "✗ Rejected"}
+      <FlatList
+        data={expenses}
+        keyExtractor={(item) => item.expense_id.toString()}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 40 }}
+        ListEmptyComponent={
+          <View className="items-center mt-20">
+            <MaterialCommunityIcons
+              name="clipboard-text-outline"
+              size={48}
+              color="#d1d5db"
+            />
+            <Text className="text-gray-400 mt-4 font-bold">
+              No expenses found
             </Text>
+          </View>
+        }
+        renderItem={({ item }) => <ExpenseCard expense={item} />}
+      />
+    </SafeAreaView>
+  );
+}
+function ExpenseCard({ expense }: { expense: any }) {
+  const router = useRouter();
+  const getIcon = (type: string) => {
+    switch (type.toLowerCase()) {
+      case "fuel":
+        return { name: "gas-station", color: "#ef4444", bg: "bg-red-50" };
+      case "toll":
+        return { name: "bridge", color: "#3b82f6", bg: "bg-blue-50" };
+      default:
+        return {
+          name: "dots-horizontal-circle",
+          color: "#8b5cf6",
+          bg: "bg-purple-50",
+        };
+    }
+  };
+  const config = getIcon(expense.expense_type);
+  const formattedDate = new Date(expense.created_at).toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "short",
+    },
+  );
+  const statusStyles: any = {
+    pending: "bg-amber-100 text-amber-700",
+    approved: "bg-green-100 text-green-700",
+    rejected: "bg-red-100 text-red-700",
+  };
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => router.push(`/ExpenseDetails?id=${expense.expense_id}`)}
+      className="bg-white rounded-3xl p-4 mb-4 shadow-sm border border-gray-100"
+    >
+      <View className="flex-row items-center">
+        <View className={`${config.bg} p-4 rounded-2xl`}>
+          <MaterialCommunityIcons
+            name={config.name as any}
+            size={24}
+            color={config.color}
+          />
+        </View>
+        <View className="flex-1 ml-4">
+          <View className="flex-row justify-between items-start">
+            <View>
+              <Text className="text-gray-400 text-[10px] font-black uppercase tracking-tighter">
+                {expense.trip.trip_code} • {formattedDate}
+              </Text>
+              <Text className="text-gray-900 font-black text-lg capitalize">
+                {expense.expense_type} Expense
+              </Text>
+            </View>
+            <Text className="text-gray-900 font-black text-lg">
+              ₹{parseFloat(expense.expense_amount).toLocaleString("en-IN")}
+            </Text>
+          </View>
+          {/* TRIP NAME & STATUS */}
+          <View className="flex-row justify-between items-center mt-3">
+            <View className="flex-row items-center">
+              <FontAwesome5 name="route" size={10} color="#9ca3af" />
+              <Text
+                className="text-gray-500 text-xs ml-1 font-medium italic"
+                numberOfLines={1}
+              >
+                {expense.trip.trip_name}
+              </Text>
+            </View>
+            <View
+              className={`${statusStyles[expense.status] || "bg-gray-100"} px-3 py-1 rounded-full`}
+            >
+              <Text className="text-[10px] font-black uppercase tracking-widest">
+                {expense.status}
+              </Text>
+            </View>
           </View>
         </View>
       </View>

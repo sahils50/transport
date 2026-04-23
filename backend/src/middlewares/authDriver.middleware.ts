@@ -18,10 +18,15 @@ export const authenticateDriver = async (
   next: NextFunction,
 ) => {
   try {
-    const token = req.headers.authorization;
+    let token = req.headers.authorization;
     if (!token) {
       return next(new AppError("Authentication token required", 401));
     }
+
+    if (token.startsWith("Bearer ")) {
+      token = token.split(" ")[1];
+    }
+
     const decoded = verifyToken(token);
     console.log("Decoded Token Data:", decoded);
     if (decoded.role !== "driver") {
